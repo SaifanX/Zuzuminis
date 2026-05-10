@@ -11,6 +11,7 @@ import { api } from "../../convex/_generated/api";
 import { Logo } from "@/components/Logo";
 import { ShoppingBag, ArrowRight, Heart, Star, Globe } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Footer } from "@/components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -82,9 +83,12 @@ export default function Home() {
           </div>
           
           <div className="relative hero-image flex justify-center">
-            <img 
+            <Image 
               src="/assets/hero-kid.png" 
               alt="Happy Mini in Zuzu Wear" 
+              width={600}
+              height={600}
+              priority
               className="w-full max-w-[600px] object-contain drop-shadow-2xl"
             />
           </div>
@@ -149,7 +153,13 @@ export default function Home() {
             {products?.slice(0, 4).map((product) => (
               <div key={product._id} className="product-card group cursor-pointer">
                 <div className="aspect-[4/5] bg-butter rounded-2xl overflow-hidden mb-6 relative border border-black/5">
-                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <Image 
+                    src={product.images[0]} 
+                    alt={product.name} 
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                  />
                   <div className="absolute top-4 right-4 translate-x-12 group-hover:translate-x-0 transition-transform">
                     <button className="w-10 h-10 bg-butter rounded-full shadow-md flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors"><Heart className="w-4 h-4" /></button>
                   </div>
@@ -177,7 +187,13 @@ export default function Home() {
                 <p className="text-gray-500 mb-8 font-body">Sustainable clothing that feels like a hug. Join the Zuzu movement.</p>
                 <Link href="/shop" className="inline-block px-8 py-4 bg-zuzu-pink text-white rounded-full font-bold shadow-lg">Shop Now &gt;</Link>
              </div>
-             <img src="/assets/product1.png" alt="Boutique banner" className="absolute right-0 bottom-0 w-[350px] object-contain translate-x-10 translate-y-10" />
+             <Image 
+               src="/assets/product1.png" 
+               alt="Boutique banner" 
+               width={350}
+               height={350}
+               className="absolute right-0 bottom-0 w-[350px] object-contain translate-x-10 translate-y-10" 
+             />
           </div>
 
           <div className="grid grid-rows-2 gap-8">
@@ -186,14 +202,26 @@ export default function Home() {
                   <h3 className="text-3xl font-display mb-4 text-gray-900">For Princes</h3>
                   <Link href="/shop" className="inline-block px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</Link>
                </div>
-               <img src="/assets/product2.png" alt="Boys wear" className="absolute right-0 bottom-0 w-[180px] object-contain" />
+               <Image 
+                 src="/assets/product2.png" 
+                 alt="Boys wear" 
+                 width={180}
+                 height={180}
+                 className="absolute right-0 bottom-0 w-[180px] object-contain" 
+               />
             </div>
             <div className="bg-[#FBE9FF] rounded-[2.5rem] p-10 flex justify-between items-center relative overflow-hidden group h-[184px]">
                <div className="relative z-10">
                   <h3 className="text-3xl font-display mb-4 text-gray-900">For Princesses</h3>
                   <Link href="/shop" className="inline-block px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</Link>
                </div>
-               <img src="/assets/product1.png" alt="Girls wear" className="absolute right-0 bottom-0 w-[180px] object-contain" />
+               <Image 
+                 src="/assets/product1.png" 
+                 alt="Girls wear" 
+                 width={180}
+                 height={180}
+                 className="absolute right-0 bottom-0 w-[180px] object-contain" 
+               />
             </div>
           </div>
         </div>
@@ -215,7 +243,13 @@ export default function Home() {
             {products?.slice(0, 8).map((product) => (
               <div key={product._id} className="product-card group cursor-pointer border border-black/5 rounded-2xl p-4 hover:shadow-xl transition-all bg-butter/50">
                 <div className="aspect-[4/5] bg-butter rounded-xl overflow-hidden mb-4 relative">
-                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <Image 
+                    src={product.images[0]} 
+                    alt={product.name} 
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                  />
                 </div>
                 <div className="flex flex-col items-center">
                    <div className="flex gap-1 text-zuzu-yellow mb-2">

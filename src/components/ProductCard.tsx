@@ -2,6 +2,7 @@
 
 import { Heart, Star } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProductCardProps {
   product: {
@@ -18,10 +19,12 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link href={`/product/${product.slug}`} className="product-card group cursor-pointer flex flex-col h-full block">
       <div className="aspect-[4/5] bg-butter rounded-2xl overflow-hidden mb-6 relative border border-black/5 shadow-sm">
-        <img 
+        <Image 
           src={product.images[0]} 
           alt={product.name} 
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          className="object-cover group-hover:scale-110 transition-transform duration-700" 
         />
         
         {/* Hover overlay with Add to Cart */}

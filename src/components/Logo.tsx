@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export function Logo({ 
   className = "w-10 h-10", 
   variant = "horizontal" 
@@ -13,11 +15,14 @@ export function Logo({
 
   return (
     <div className={`relative ${className}`}>
-      <img 
+      <Image 
         src={src} 
         alt="Zuzuminis Logo" 
-        className="w-full h-full object-contain"
+        fill
+        priority
+        className="object-contain"
       />
     </div>
   );
 }
+

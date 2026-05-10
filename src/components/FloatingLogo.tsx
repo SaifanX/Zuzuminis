@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 
 export function FloatingLogo({ className = "" }: { className?: string }) {
@@ -19,8 +20,14 @@ export function FloatingLogo({ className = "" }: { className?: string }) {
   }, []);
 
   return (
-    <div ref={ref} className={`opacity-5 pointer-events-none select-none ${className}`}>
-      <img src="/assets/logo.png" alt="" className="w-full h-full grayscale invert" />
+    <div ref={ref} className={`opacity-5 pointer-events-none select-none relative ${className}`}>
+      <Image 
+        src="/assets/logo.png" 
+        alt="" 
+        fill
+        className="object-contain grayscale invert" 
+      />
     </div>
   );
 }
+

@@ -20,7 +20,7 @@ export function Footer() {
             <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-blue cursor-pointer transition-colors" />
           </div>
         </div>
-        
+
         <div>
           <h4 className="font-display text-xl mb-8 text-gray-900">Universe</h4>
           <ul className="space-y-4 text-sm text-gray-400 font-bold uppercase tracking-widest text-[10px]">
@@ -51,13 +51,11 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-gray-300 font-bold uppercase tracking-widest">
-         <p>© 2024 Zuzu Minis Studio. All Rights Reserved.</p>
-         <div className="flex gap-6">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-4 grayscale opacity-30" alt="Visa" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-4 grayscale opacity-30" alt="Mastercard" />
-         </div>
+        <p>© 2026 Zuzu Minis Studio. All Rights Reserved.</p>
+        <div className="flex gap-6">
+        </div>
       </div>
     </footer>
   );
