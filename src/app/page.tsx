@@ -11,6 +11,7 @@ import { api } from "../../convex/_generated/api";
 import { Logo } from "@/components/Logo";
 import { ShoppingBag, ArrowRight, Heart, Star, Globe } from "lucide-react";
 import Link from "next/link";
+import { Footer } from "@/components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -74,9 +75,9 @@ export default function Home() {
             <p className="text-lg opacity-80 max-w-lg mb-12 font-body leading-relaxed">
               Discover premium, sustainable kidswear designed for every milestone. From organic cotton basics to celebration-ready outfits.
             </p>
-            <button className="px-10 py-5 bg-zuzu-pink text-white rounded-full font-bold shadow-xl hover:scale-105 transition-all flex items-center gap-3">
+            <Link href="/shop" className="inline-flex items-center justify-center px-10 py-5 bg-zuzu-pink text-white rounded-full font-bold shadow-xl hover:scale-105 transition-all gap-3">
               Explore Collection <ArrowRight className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
           
           <div className="relative hero-image flex justify-center">
@@ -112,7 +113,7 @@ export default function Home() {
             { label: "4-5", sub: "Early Years", gradient: "from-[#FF9248] to-[#FFB385]", shadow: "shadow-orange-100" },
             { label: "5-7", sub: "Minis", gradient: "from-[#9D50BB] to-[#6E48AA]", shadow: "shadow-purple-100" },
           ].map((cat, i) => (
-            <div key={i} className="flex flex-col items-center gap-6 group cursor-pointer">
+            <Link href="/shop" key={i} className="flex flex-col items-center gap-6 group cursor-pointer">
               <div className="relative group-hover:scale-110 transition-transform duration-500">
                 {/* Secondary Outer Ring */}
                 <div className="absolute -inset-2 border-2 border-dashed border-gray-200 rounded-full opacity-50 group-hover:border-zuzu-purple transition-all duration-500" />
@@ -127,7 +128,7 @@ export default function Home() {
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-zuzu-purple transition-colors">{cat.sub}</p>
                 <div className="h-1 w-0 bg-zuzu-purple mx-auto rounded-full group-hover:w-full transition-all duration-300" />
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -173,7 +174,7 @@ export default function Home() {
              <div className="relative z-10 max-w-sm">
                 <h2 className="text-5xl font-display mb-6 text-gray-900 leading-[1.1]">15% Off Your First Mini Order</h2>
                 <p className="text-gray-500 mb-8 font-body">Sustainable clothing that feels like a hug. Join the Zuzu movement.</p>
-                <button className="px-8 py-4 bg-zuzu-pink text-white rounded-full font-bold shadow-lg">Shop Now &gt;</button>
+                <Link href="/shop" className="inline-block px-8 py-4 bg-zuzu-pink text-white rounded-full font-bold shadow-lg">Shop Now &gt;</Link>
              </div>
              <img src="/assets/product1.png" alt="Boutique banner" className="absolute right-0 bottom-0 w-[350px] object-contain translate-x-10 translate-y-10" />
           </div>
@@ -182,14 +183,14 @@ export default function Home() {
             <div className="bg-[#FFF6E9] rounded-[2.5rem] p-10 flex justify-between items-center relative overflow-hidden group h-[184px]">
                <div className="relative z-10">
                   <h3 className="text-3xl font-display mb-4 text-gray-900">For Princes</h3>
-                  <button className="px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</button>
+                  <Link href="/shop" className="inline-block px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</Link>
                </div>
                <img src="/assets/product2.png" alt="Boys wear" className="absolute right-0 bottom-0 w-[180px] object-contain" />
             </div>
             <div className="bg-[#FBE9FF] rounded-[2.5rem] p-10 flex justify-between items-center relative overflow-hidden group h-[184px]">
                <div className="relative z-10">
                   <h3 className="text-3xl font-display mb-4 text-gray-900">For Princesses</h3>
-                  <button className="px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</button>
+                  <Link href="/shop" className="inline-block px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</Link>
                </div>
                <img src="/assets/product1.png" alt="Girls wear" className="absolute right-0 bottom-0 w-[180px] object-contain" />
             </div>
@@ -203,9 +204,9 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
             <h2 className="text-4xl font-display text-gray-900">Popular Mini Styles</h2>
             <div className="flex gap-4 p-1 bg-gray-100 rounded-full">
-               <button className="px-6 py-2 bg-zuzu-pink text-white rounded-full text-xs font-bold shadow-md">All Styles</button>
-               <button className="px-6 py-2 text-gray-400 text-xs font-bold hover:text-gray-900 transition-all">For Boys</button>
-               <button className="px-6 py-2 text-gray-400 text-xs font-bold hover:text-gray-900 transition-all">For Girls</button>
+               <Link href="/shop" className="px-6 py-2 bg-zuzu-pink text-white rounded-full text-xs font-bold shadow-md">All Styles</Link>
+               <Link href="/shop" className="px-6 py-2 text-gray-400 text-xs font-bold hover:text-gray-900 transition-all">For Boys</Link>
+               <Link href="/shop" className="px-6 py-2 text-gray-400 text-xs font-bold hover:text-gray-900 transition-all">For Girls</Link>
             </div>
           </div>
 
@@ -249,63 +250,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="pt-24 pb-12 px-8 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
-          <div>
-            <Link href="/" className="flex items-center mb-8">
-              <Logo className="w-56 h-16" variant="horizontal" />
-            </Link>
-            <p className="text-gray-400 text-sm leading-relaxed mb-8">
-              Premium sustainable kidswear, crafted with love for the dreamers of tomorrow. Quality is our promise.
-            </p>
-            <div className="flex gap-4">
-              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
-              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
-              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
-              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
-            </div>
-          </div>
-          
-          <div>
-            <h4 className="font-display text-xl mb-8 text-gray-900">Universe</h4>
-            <ul className="space-y-4 text-sm text-gray-400 font-bold uppercase tracking-widest text-[10px]">
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Our Story</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Sustainability</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Care Guide</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Privacy</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-display text-xl mb-8 text-gray-900">Support</h4>
-            <ul className="space-y-4 text-sm text-gray-400 font-bold uppercase tracking-widest text-[10px]">
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Track Order</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Exchanges</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Size Chart</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Shipping</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-display text-xl mb-8 text-gray-900">Explore</h4>
-            <ul className="space-y-4 text-sm text-gray-400 font-bold uppercase tracking-widest text-[10px]">
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Shop All</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">New Arrivals</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Best Sellers</Link></li>
-              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Gift Cards</Link></li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-gray-300 font-bold uppercase tracking-widest">
-           <p>© 2024 Zuzu Minis Studio. All Rights Reserved.</p>
-           <div className="flex gap-6">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-4 grayscale opacity-30" alt="Visa" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-4 grayscale opacity-30" alt="Mastercard" />
-           </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

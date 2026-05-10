@@ -2,9 +2,22 @@ import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 
 export const list = query({
-  args: {},
-  handler: async (ctx) => {
-    return await ctx.db.query("products").collect();
+  args: {
+    ageGroup: v.optional(v.string()),
+    gender: v.optional(v.string()),
+    category: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.query("products").filter((q) => {
+      const conditions = [];
+      if (args.ageGroup && args.ageGroup !== "All") conditions.push(q.eq(q.field("ageGroup"), args.ageGroup));
+      if (args.gender && args.gender !== "All") conditions.push(q.eq(q.field("gender"), args.gender));
+      if (args.category && args.category !== "All") conditions.push(q.eq(q.field("category"), args.category));
+      
+      if (conditions.length === 0) return true;
+      if (conditions.length === 1) return conditions[0];
+      return q.and(...conditions as [any, any, ...any[]]);
+    }).collect();
   },
 });
 

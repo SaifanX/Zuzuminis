@@ -32,11 +32,11 @@ export function Navbar() {
 
         <div className="hidden md:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-gray-900">
           <Link href="/" className="hover:text-zuzu-purple transition-colors">Home</Link>
-          <Link href="#" className="hover:text-zuzu-purple transition-colors">Shop</Link>
-          <Link href="#" className="hover:text-zuzu-purple transition-colors">Collections</Link>
-          <Link href="#" className="hover:text-zuzu-purple transition-colors">New Arrivals</Link>
-          <Link href="#" className="hover:text-zuzu-purple transition-colors">Offer</Link>
-          <Link href="#" className="hover:text-zuzu-purple transition-colors">Blog</Link>
+          <Link href="/shop" className="hover:text-zuzu-purple transition-colors">Shop</Link>
+          <Link href="/shop" className="hover:text-zuzu-purple transition-colors">Collections</Link>
+          <Link href="/shop" className="hover:text-zuzu-purple transition-colors">New Arrivals</Link>
+          <Link href="/shop" className="hover:text-zuzu-purple transition-colors">Offer</Link>
+          <Link href="/shop" className="hover:text-zuzu-purple transition-colors">Blog</Link>
         </div>
 
         <div className="flex items-center gap-6 text-gray-900">
