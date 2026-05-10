@@ -1,6 +1,7 @@
 "use client";
 
 import { Heart, Star } from "lucide-react";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: {
@@ -8,16 +9,15 @@ interface ProductCardProps {
     name: string;
     price: number;
     images: string[];
+    slug: string;
     category?: string;
   };
 }
 
-import Link from "next/link";
-
 export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link href={`/product/${product.slug}`} className="product-card group cursor-pointer flex flex-col h-full block">
-      <div className="aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden mb-6 relative">
+      <div className="aspect-[4/5] bg-butter rounded-2xl overflow-hidden mb-6 relative border border-black/5 shadow-sm">
         <img 
           src={product.images[0]} 
           alt={product.name} 
@@ -26,14 +26,14 @@ export function ProductCard({ product }: ProductCardProps) {
         
         {/* Hover overlay with Add to Cart */}
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-          <button className="bg-white text-zuzu-blue font-bold py-3 px-6 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-zuzu-blue hover:text-white">
+          <button className="bg-butter text-zuzu-blue font-bold py-3 px-6 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-zuzu-blue hover:text-white">
             Quick Add +
           </button>
         </div>
 
         {/* Wishlist Button */}
         <div className="absolute top-4 right-4 translate-x-12 group-hover:translate-x-0 transition-transform duration-300 delay-100">
-          <button className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors">
+          <button className="w-10 h-10 bg-butter rounded-full shadow-md flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors">
             <Heart className="w-4 h-4" />
           </button>
         </div>

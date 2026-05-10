@@ -38,7 +38,7 @@ export function ShopLayout() {
         <input 
           type="text" 
           placeholder="Search minis..." 
-          className="w-full pl-10 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-zuzu-blue text-sm font-medium outline-none transition-shadow"
+          className="w-full pl-10 pr-4 py-3 bg-butter/50 border border-black/5 rounded-xl focus:ring-2 focus:ring-zuzu-blue text-sm font-medium outline-none transition-shadow"
         />
       </div>
 
@@ -72,7 +72,7 @@ export function ShopLayout() {
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
                 ageGroup === age 
                   ? "bg-zuzu-blue text-white shadow-md" 
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-butter text-gray-600 hover:bg-white/50 border border-black/5"
               }`}
             >
               {age}
@@ -92,7 +92,7 @@ export function ShopLayout() {
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
                 gender === gen 
                   ? "bg-zuzu-pink text-white shadow-md" 
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-butter text-gray-600 hover:bg-white/50 border border-black/5"
               }`}
             >
               {gen}
@@ -114,7 +114,7 @@ export function ShopLayout() {
 
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-24 relative z-10">
         {/* Mobile Top Bar */}
-      <div className="md:hidden flex justify-between items-center mb-8 sticky top-[72px] bg-white/80 backdrop-blur-md z-40 py-4 -mx-6 px-6 border-b border-gray-100">
+      <div className="md:hidden flex justify-between items-center mb-8 sticky top-[72px] bg-butter/80 backdrop-blur-md z-40 py-4 -mx-6 px-6 border-b border-gray-100">
         <h1 className="text-2xl font-display">Shop All</h1>
         <button 
           onClick={() => setIsMobileFilterOpen(true)}
@@ -128,7 +128,7 @@ export function ShopLayout() {
       {isMobileFilterOpen && (
         <div className="fixed inset-0 bg-black/40 z-50 md:hidden backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)}>
           <div 
-            className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white p-6 overflow-y-auto shadow-2xl"
+            className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-butter p-6 overflow-y-auto shadow-2xl"
             onClick={e => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-8">

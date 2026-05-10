@@ -18,7 +18,7 @@ export function ProductGallery({ images }: ProductGalleryProps) {
             key={i}
             onClick={() => setMainImage(img)}
             className={`w-20 h-24 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
-              mainImage === img ? "border-zuzu-teal" : "border-transparent opacity-60 hover:opacity-100"
+              mainImage === img ? "border-zuzu-blue" : "border-transparent opacity-60 hover:opacity-100"
             }`}
           >
             <img src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover bg-gray-50" />

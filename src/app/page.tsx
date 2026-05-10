@@ -16,8 +16,8 @@ import { Footer } from "@/components/Footer";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const products = useQuery(api.products.list);
-  const container = useRef(null);
+  const products = useQuery(api.products.list, {});
+  const container = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     // Reveal Animations - Hero only once
@@ -34,15 +34,16 @@ export default function Home() {
     }
 
     gsap.from(".category-circle", {
-      scale: 0,
+      scale: 0.8,
       opacity: 0,
       duration: 1,
-      stagger: 0.15,
+      stagger: 0.1,
       ease: "back.out(1.7)",
       scrollTrigger: {
         trigger: ".categories-section",
-        start: "top 95%",
-      }
+        start: "top 85%",
+      },
+      clearProps: "all"
     });
 
     // Only animate products if they exist
@@ -90,11 +91,11 @@ export default function Home() {
         </div>
         
         {/* Cloud Separator */}
-        <div className="absolute bottom-0 left-0 w-full h-24 bg-white cloud-separator" />
+        <div className="absolute bottom-0 left-0 w-full h-24 bg-butter cloud-separator" />
       </section>
 
       {/* SHOP BY AGE */}
-      <section className="categories-section py-32 px-8 text-center relative overflow-hidden bg-gray-50/50">
+      <section className="categories-section py-32 px-8 text-center relative overflow-hidden bg-butter/50">
         {/* Background Blobs for Color */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30">
           <div className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-zuzu-blue rounded-full blur-[120px]" />
@@ -116,7 +117,7 @@ export default function Home() {
             <Link href="/shop" key={i} className="flex flex-col items-center gap-6 group cursor-pointer">
               <div className="relative group-hover:scale-110 transition-transform duration-500">
                 {/* Secondary Outer Ring */}
-                <div className="absolute -inset-2 border-2 border-dashed border-gray-200 rounded-full opacity-50 group-hover:border-zuzu-orange transition-all duration-500" />
+                <div className="absolute -inset-2 border-2 border-dashed border-zuzu-blue/20 rounded-full group-hover:border-zuzu-orange transition-all duration-500" />
                 
                 <div className={`category-circle w-32 h-32 rounded-full bg-gradient-to-br ${cat.gradient} flex items-center justify-center text-white text-3xl font-display shadow-xl ${cat.shadow} relative overflow-hidden`}>
                   {/* Inner Glow */}
@@ -147,10 +148,10 @@ export default function Home() {
           <div className="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {products?.slice(0, 4).map((product) => (
               <div key={product._id} className="product-card group cursor-pointer">
-                <div className="aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden mb-6 relative">
+                <div className="aspect-[4/5] bg-butter rounded-2xl overflow-hidden mb-6 relative border border-black/5">
                   <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute top-4 right-4 translate-x-12 group-hover:translate-x-0 transition-transform">
-                    <button className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors"><Heart className="w-4 h-4" /></button>
+                    <button className="w-10 h-10 bg-butter rounded-full shadow-md flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors"><Heart className="w-4 h-4" /></button>
                   </div>
                 </div>
                 <div className="text-center">
@@ -167,7 +168,7 @@ export default function Home() {
       </section>
 
       {/* BANNERS */}
-      <section className="py-24 px-8 bg-white">
+      <section className="py-24 px-8 bg-butter">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Main Banner */}
           <div className="bg-[#E9F9FF] rounded-[3rem] p-12 flex items-center relative overflow-hidden h-[400px]">
@@ -199,7 +200,7 @@ export default function Home() {
       </section>
 
       {/* POPULAR KIDS STYLES */}
-      <section className="py-24 px-8 bg-white">
+      <section className="py-24 px-8 bg-butter">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
             <h2 className="text-4xl font-display text-gray-900">Popular Mini Styles</h2>
@@ -212,8 +213,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             {products?.slice(0, 8).map((product) => (
-              <div key={product._id} className="product-card group cursor-pointer border border-gray-100 rounded-2xl p-4 hover:shadow-xl transition-all">
-                <div className="aspect-[4/5] bg-gray-50 rounded-xl overflow-hidden mb-4 relative">
+              <div key={product._id} className="product-card group cursor-pointer border border-black/5 rounded-2xl p-4 hover:shadow-xl transition-all bg-butter/50">
+                <div className="aspect-[4/5] bg-butter rounded-xl overflow-hidden mb-4 relative">
                   <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
                 <div className="flex flex-col items-center">

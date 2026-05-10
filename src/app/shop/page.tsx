@@ -1,10 +1,10 @@
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { Footer } from "../../components/Footer";
 import { ShopLayout } from "@/components/ShopLayout";
 
 export default function ShopPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-butter">
       <Navbar />
       
       {/* Spacer for fixed navbar */}

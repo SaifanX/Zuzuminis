@@ -25,27 +25,27 @@ export function Navbar() {
         </div>
       </div>
 
-      <div className="bg-white py-4 px-8 flex justify-between items-center shadow-sm">
+      <div className="bg-butter py-4 px-8 flex justify-between items-center shadow-sm">
         <Link href="/" className="flex items-center">
           <Logo className="w-48 h-12" variant="horizontal" />
         </Link>
 
         <div className="hidden md:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-gray-900">
-          <Link href="/" className="hover:text-zuzu-teal transition-colors">Home</Link>
-          <Link href="/shop" className="hover:text-zuzu-teal transition-colors">Shop</Link>
-          <Link href="/shop" className="hover:text-zuzu-teal transition-colors">Collections</Link>
-          <Link href="/shop" className="hover:text-zuzu-teal transition-colors">New Arrivals</Link>
-          <Link href="/shop" className="hover:text-zuzu-teal transition-colors">Offer</Link>
-          <Link href="/shop" className="hover:text-zuzu-teal transition-colors">Blog</Link>
+          <Link href="/" className="hover:text-zuzu-blue transition-colors">Home</Link>
+          <Link href="/shop" className="hover:text-zuzu-blue transition-colors">Shop</Link>
+          <Link href="/shop" className="hover:text-zuzu-blue transition-colors">Collections</Link>
+          <Link href="/shop" className="hover:text-zuzu-blue transition-colors">New Arrivals</Link>
+          <Link href="/shop" className="hover:text-zuzu-blue transition-colors">Offer</Link>
+          <Link href="/shop" className="hover:text-zuzu-blue transition-colors">Blog</Link>
         </div>
 
         <div className="flex items-center gap-6 text-gray-900">
-          <button className="hover:text-zuzu-teal transition-all"><Search className="w-5 h-5" /></button>
+          <button className="hover:text-zuzu-blue transition-all"><Search className="w-5 h-5" /></button>
           <div className="relative">
-            <button className="hover:text-zuzu-teal transition-all"><ShoppingCart className="w-5 h-5" /></button>
-            <span className="absolute -top-2 -right-2 bg-zuzu-teal text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+            <button className="hover:text-zuzu-blue transition-all"><ShoppingCart className="w-5 h-5" /></button>
+            <span className="absolute -top-2 -right-2 bg-zuzu-orange text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
           </div>
-          <button className="hover:text-zuzu-teal transition-all"><User className="w-5 h-5" /></button>
+          <button className="hover:text-zuzu-blue transition-all"><User className="w-5 h-5" /></button>
         </div>
       </div>
     </nav>
