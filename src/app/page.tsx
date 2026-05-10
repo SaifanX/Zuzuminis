@@ -9,7 +9,7 @@ import { GrainOverlay } from "@/components/GrainOverlay";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Logo } from "@/components/Logo";
-import { ShoppingBag, ArrowRight, Heart } from "lucide-react";
+import { ShoppingBag, ArrowRight, Heart, Star, Globe } from "lucide-react";
 import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -19,169 +19,145 @@ export default function Home() {
   const container = useRef(null);
 
   useGSAP(() => {
-    // Hero Entrance
-    gsap.from(".hero-content > *", {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.2,
-      ease: "power3.out",
-    });
+    // Reveal Animations - Hero only once
+    const heroElements = container.current?.querySelectorAll(".hero-content > *");
+    if (heroElements?.length) {
+      gsap.from(heroElements, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        clearProps: "all"
+      });
+    }
 
-    gsap.from(".hero-image", {
-      scale: 1.2,
-      opacity: 0,
-      duration: 1.5,
-      ease: "power2.out",
-    });
-
-    // Category Reveal
     gsap.from(".category-circle", {
       scale: 0,
       opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
+      duration: 1,
+      stagger: 0.15,
+      ease: "back.out(1.7)",
       scrollTrigger: {
         trigger: ".categories-section",
-        start: "top 80%",
+        start: "top 95%",
       }
     });
 
-    // Product Fade In
-    gsap.from(".product-card", {
-      y: 100,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.1,
-      scrollTrigger: {
-        trigger: ".products-grid",
-        start: "top 85%",
-      }
-    });
-  }, { scope: container });
+    // Only animate products if they exist
+    if (products && products.length > 0) {
+      gsap.from(".product-card", {
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: ".products-grid",
+          start: "top 85%",
+        }
+      });
+    }
+  }, { scope: container, dependencies: [products] });
 
   return (
-    <main ref={container} className="relative overflow-x-hidden bg-white">
+    <main ref={container} className="relative overflow-x-hidden bg-white selection:bg-zuzu-purple selection:text-white">
       <GrainOverlay />
       <Navbar />
 
       {/* HERO SECTION */}
-      <section className="relative min-h-[95vh] bg-zuzu-purple pt-48 pb-60 px-8 flex items-center overflow-hidden">
+      <section className="relative min-h-[85vh] bg-zuzu-purple pt-48 pb-32 px-8 flex items-center overflow-hidden">
         <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-20 items-center relative z-10">
           <div className="hero-content text-white">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="w-12 h-[2px] bg-zuzu-yellow" />
-              <span className="text-zuzu-yellow font-bold uppercase tracking-[0.3em] text-xs">New Collection 2024</span>
-            </div>
-            <h1 className="text-7xl md:text-9xl font-display leading-[0.85] mb-10">
-              Style for your <br />
-              <span className="text-zuzu-yellow italic">little</span> hero.
+            <h1 className="text-6xl md:text-8xl font-display leading-[1.1] mb-8">
+              Styles That Make Your <span className="text-zuzu-yellow italic">Minis</span> Shine!
             </h1>
-            <p className="text-xl opacity-90 max-w-lg mb-14 font-body leading-relaxed">
-              Premium, organic, and designed for every playground adventure. Give them the comfort they deserve.
+            <p className="text-lg opacity-80 max-w-lg mb-12 font-body leading-relaxed">
+              Discover premium, sustainable kidswear designed for every milestone. From organic cotton basics to celebration-ready outfits.
             </p>
-            <div className="flex flex-wrap gap-6 items-center">
-              <button className="group px-12 py-6 bg-zuzu-pink text-white rounded-full font-body text-lg font-bold shadow-2xl hover:scale-105 transition-all flex items-center gap-4">
-                Shop Collection 
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-              </button>
-              <button className="px-8 py-3 border-b-2 border-white/30 text-white font-bold hover:border-white transition-all">
-                Our Story
-              </button>
-            </div>
+            <button className="px-10 py-5 bg-zuzu-pink text-white rounded-full font-bold shadow-xl hover:scale-105 transition-all flex items-center gap-3">
+              Explore Collection <ArrowRight className="w-5 h-5" />
+            </button>
           </div>
           
-          <div className="hero-image relative aspect-[4/5] rounded-[4rem] overflow-hidden shadow-2xl border-8 border-white/10 group">
+          <div className="relative hero-image flex justify-center">
             <img 
               src="/assets/hero-kid.png" 
-              alt="Happy Kid in Zuzu Wear" 
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3s]"
+              alt="Happy Mini in Zuzu Wear" 
+              className="w-full max-w-[600px] object-contain drop-shadow-2xl"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>
         </div>
         
-        {/* Cloud Bottom */}
-        <div className="absolute bottom-0 left-0 w-full h-40 bg-white cloud-separator" />
+        {/* Cloud Separator */}
+        <div className="absolute bottom-0 left-0 w-full h-24 bg-white cloud-separator" />
       </section>
 
       {/* SHOP BY AGE */}
-      <section className="categories-section py-32 px-8 text-center bg-white">
-        <div className="max-w-2xl mx-auto mb-20">
-          <h2 className="text-5xl md:text-6xl font-display mb-6 text-gray-900">Shop by Age</h2>
-          <p className="text-gray-400 font-body">Find the perfect fit for every milestone of their journey.</p>
+      <section className="categories-section py-32 px-8 text-center relative overflow-hidden bg-gray-50/50">
+        {/* Background Blobs for Color */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30">
+          <div className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-zuzu-blue rounded-full blur-[120px]" />
+          <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-zuzu-pink rounded-full blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-zuzu-yellow rounded-full blur-[150px] opacity-50" />
         </div>
+
+        <h2 className="text-4xl md:text-5xl font-display mb-20 text-gray-900 relative z-10">Shop Styles by Age</h2>
         
-        <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 md:gap-20">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-10 md:gap-14 relative z-10">
           {[
-            { label: "0-1", sub: "Age 0-1 Years", color: "bg-zuzu-blue" },
-            { label: "1-3", sub: "Age 1-3 Years", color: "bg-zuzu-teal" },
-            { label: "3-5", sub: "Age 3-5 Years", color: "bg-zuzu-yellow" },
-            { label: "5-8", sub: "Age 5-8 Years", color: "bg-zuzu-pink" },
-            { label: "8-10", sub: "Age 8-10 Years", color: "bg-zuzu-purple" },
-            { label: "10+", sub: "Age 10+ Years", color: "bg-[#00E0D7]" },
+            { label: "0-1", sub: "Newborns", gradient: "from-[#FF6B6B] to-[#FF8E8E]", shadow: "shadow-red-100" },
+            { label: "1-2", sub: "Infants", gradient: "from-[#4D96FF] to-[#6BCBFF]", shadow: "shadow-blue-100" },
+            { label: "2-3", sub: "Toddlers", gradient: "from-[#6BCB77] to-[#95E1D3]", shadow: "shadow-green-100" },
+            { label: "3-4", sub: "Pre-School", gradient: "from-[#FFD93D] to-[#FFEA85]", shadow: "shadow-yellow-100" },
+            { label: "4-5", sub: "Early Years", gradient: "from-[#FF9248] to-[#FFB385]", shadow: "shadow-orange-100" },
+            { label: "5-7", sub: "Minis", gradient: "from-[#9D50BB] to-[#6E48AA]", shadow: "shadow-purple-100" },
           ].map((cat, i) => (
             <div key={i} className="flex flex-col items-center gap-6 group cursor-pointer">
-              <div className={`category-circle w-36 h-36 rounded-full ${cat.color} flex items-center justify-center text-white text-4xl font-display shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
-                {cat.label}
+              <div className="relative group-hover:scale-110 transition-transform duration-500">
+                {/* Secondary Outer Ring */}
+                <div className="absolute -inset-2 border-2 border-dashed border-gray-200 rounded-full opacity-50 group-hover:border-zuzu-purple transition-all duration-500" />
+                
+                <div className={`category-circle w-32 h-32 rounded-full bg-gradient-to-br ${cat.gradient} flex items-center justify-center text-white text-3xl font-display shadow-xl ${cat.shadow} relative overflow-hidden`}>
+                  {/* Inner Glow */}
+                  <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="relative z-10">{cat.label}</span>
+                </div>
               </div>
-              <p className="text-xs uppercase tracking-widest text-gray-400 font-bold group-hover:text-gray-900 transition-colors">{cat.sub}</p>
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-zuzu-purple transition-colors">{cat.sub}</p>
+                <div className="h-1 w-0 bg-zuzu-purple mx-auto rounded-full group-hover:w-full transition-all duration-300" />
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* NEW ARRIVALS GRID */}
-      <section className="py-32 px-8 bg-gray-50 relative">
+      {/* NEW ARRIVALS */}
+      <section className="py-24 px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-8 mb-20">
-            <div>
-              <span className="text-zuzu-pink font-bold uppercase tracking-widest text-xs mb-4 block">Hand-picked for you</span>
-              <h2 className="text-6xl font-display text-gray-900">New Arrivals</h2>
+          <div className="flex justify-between items-center mb-16">
+            <h2 className="text-4xl font-display text-gray-900">New Arrivals</h2>
+            <div className="flex gap-4">
+               <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&lt;</button>
+               <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&gt;</button>
             </div>
-            <Link href="/shop" className="group flex items-center gap-4 text-gray-400 hover:text-gray-900 transition-all">
-              <span className="font-bold uppercase tracking-widest text-sm">Explore All Products</span>
-              <div className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-zuzu-purple group-hover:border-zuzu-purple group-hover:text-white transition-all">
-                <ArrowRight className="w-5 h-5" />
-              </div>
-            </Link>
           </div>
 
-          <div className="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {products?.slice(0, 4).map((product, i) => (
+          <div className="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {products?.slice(0, 4).map((product) => (
               <div key={product._id} className="product-card group cursor-pointer">
-                <div className="aspect-[3/4] bg-white rounded-[3rem] overflow-hidden mb-8 relative shadow-sm group-hover:shadow-2xl transition-all duration-700">
-                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                  
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
-                  {/* Quick Actions */}
-                  <div className="absolute top-6 right-6 translate-x-12 group-hover:translate-x-0 transition-transform duration-500">
-                    <button className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors">
-                      <Heart className="w-5 h-5" />
-                    </button>
+                <div className="aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden mb-6 relative">
+                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute top-4 right-4 translate-x-12 group-hover:translate-x-0 transition-transform">
+                    <button className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors"><Heart className="w-4 h-4" /></button>
                   </div>
-                  
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 translate-y-20 group-hover:translate-y-0 transition-transform duration-500 w-[80%]">
-                    <button className="w-full py-4 bg-zuzu-purple text-white rounded-full shadow-xl font-bold flex items-center justify-center gap-3 hover:bg-zuzu-pink transition-colors">
-                      <ShoppingBag className="w-4 h-4" />
-                      Quick Add
-                    </button>
-                  </div>
-
-                  {i === 0 && <span className="absolute top-6 left-6 bg-zuzu-pink text-white text-[10px] px-4 py-2 rounded-full uppercase font-bold shadow-lg">Trending</span>}
                 </div>
-                
-                <div className="px-2">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-display text-gray-900 group-hover:text-zuzu-purple transition-colors">{product.name}</h3>
-                    <p className="text-zuzu-purple font-bold text-lg">₹{product.price}</p>
-                  </div>
-                  <div className="flex gap-1 text-zuzu-yellow text-xs">
-                    {"★★★★★".split("").map((s, i) => <span key={i}>{s}</span>)}
-                    <span className="text-gray-300 ml-2">(24 reviews)</span>
-                  </div>
+                <div className="text-center">
+                   <div className="flex justify-center gap-1 text-zuzu-yellow mb-2">
+                     {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
+                   </div>
+                   <h3 className="text-lg font-display text-gray-900 mb-2">{product.name}</h3>
+                   <p className="text-zuzu-purple font-bold">₹{product.price}</p>
                 </div>
               </div>
             ))}
@@ -189,98 +165,145 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PROMO BANNERS */}
-      <section className="py-32 px-8 bg-white">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
-          <div className="bg-[#E9F9FF] rounded-[4rem] p-16 flex flex-col justify-center items-start relative overflow-hidden group h-[500px]">
-             <div className="relative z-10">
-               <span className="text-zuzu-pink font-bold uppercase tracking-widest text-xs mb-6 block">Member Exclusive</span>
-               <h2 className="text-6xl font-display mb-10 max-w-sm text-gray-900 leading-[1.1]">15% Off Your First Adventure</h2>
-               <button className="px-10 py-5 bg-zuzu-purple text-white rounded-full font-bold shadow-2xl hover:bg-zuzu-pink hover:scale-105 transition-all">Claim Discount &gt;</button>
+      {/* BANNERS */}
+      <section className="py-24 px-8 bg-white">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Main Banner */}
+          <div className="bg-[#E9F9FF] rounded-[3rem] p-12 flex items-center relative overflow-hidden h-[400px]">
+             <div className="relative z-10 max-w-sm">
+                <h2 className="text-5xl font-display mb-6 text-gray-900 leading-[1.1]">15% Off Your First Mini Order</h2>
+                <p className="text-gray-500 mb-8 font-body">Sustainable clothing that feels like a hug. Join the Zuzu movement.</p>
+                <button className="px-8 py-4 bg-zuzu-pink text-white rounded-full font-bold shadow-lg">Shop Now &gt;</button>
              </div>
-             {/* Abstract Shapes */}
-             <div className="absolute top-0 right-0 w-64 h-64 bg-zuzu-blue/10 rounded-full translate-x-20 -translate-y-20 blur-3xl" />
-             <div className="absolute bottom-0 right-0 w-80 h-80 bg-zuzu-pink/10 rounded-full translate-x-20 translate-y-20 blur-3xl" />
+             <img src="/assets/product1.png" alt="Boutique banner" className="absolute right-0 bottom-0 w-[350px] object-contain translate-x-10 translate-y-10" />
           </div>
 
           <div className="grid grid-rows-2 gap-8">
-            <div className="bg-[#FFF6E9] rounded-[3.5rem] p-12 flex justify-between items-center group overflow-hidden relative cursor-pointer shadow-sm hover:shadow-xl transition-all">
+            <div className="bg-[#FFF6E9] rounded-[2.5rem] p-10 flex justify-between items-center relative overflow-hidden group h-[184px]">
                <div className="relative z-10">
-                 <h3 className="text-4xl font-display mb-6 text-gray-900">For The Little <br /><span className="text-zuzu-blue">Princes</span></h3>
-                 <button className="group flex items-center gap-3 text-zuzu-pink font-bold uppercase tracking-widest text-xs">
-                   Shop Boys Collection
-                   <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                 </button>
+                  <h3 className="text-3xl font-display mb-4 text-gray-900">For Princes</h3>
+                  <button className="px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</button>
                </div>
-               <div className="w-40 h-40 bg-zuzu-blue/20 rounded-full group-hover:scale-125 transition-transform duration-1000" />
+               <img src="/assets/product2.png" alt="Boys wear" className="absolute right-0 bottom-0 w-[180px] object-contain" />
             </div>
-            <div className="bg-[#FBE9FF] rounded-[3.5rem] p-12 flex justify-between items-center group overflow-hidden relative cursor-pointer shadow-sm hover:shadow-xl transition-all">
+            <div className="bg-[#FBE9FF] rounded-[2.5rem] p-10 flex justify-between items-center relative overflow-hidden group h-[184px]">
                <div className="relative z-10">
-                 <h3 className="text-4xl font-display mb-6 text-gray-900">For The Little <br /><span className="text-zuzu-pink">Princesses</span></h3>
-                 <button className="group flex items-center gap-3 text-zuzu-pink font-bold uppercase tracking-widest text-xs">
-                   Shop Girls Collection
-                   <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                 </button>
+                  <h3 className="text-3xl font-display mb-4 text-gray-900">For Princesses</h3>
+                  <button className="px-6 py-3 bg-zuzu-pink text-white rounded-full font-bold text-xs">Explore &gt;</button>
                </div>
-               <div className="w-40 h-40 bg-zuzu-pink/20 rounded-full group-hover:scale-125 transition-transform duration-1000" />
+               <img src="/assets/product1.png" alt="Girls wear" className="absolute right-0 bottom-0 w-[180px] object-contain" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="relative bg-zuzu-purple pt-64 pb-20 px-8 text-white">
-        <div className="absolute top-0 left-0 w-full h-40 bg-white cloud-top" />
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid md:grid-cols-12 gap-20 mb-32">
-            <div className="md:col-span-5">
-               <Link href="/" className="flex items-center gap-3 mb-10">
-                  <Logo className="w-16 h-16 invert brightness-0" />
-                  <span className="font-display text-5xl tracking-tighter">zuzu</span>
-               </Link>
-               <p className="opacity-70 text-lg leading-relaxed mb-12 max-w-sm font-body">
-                 Crafting childhood magic through premium, sustainable style. Based in Bangalore, inspired by you.
-               </p>
-               <div className="flex gap-6">
-                 {[1,2,3,4].map(i => (
-                    <div key={i} className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-zuzu-pink hover:scale-110 transition-all cursor-pointer">
-                      <div className="w-5 h-5 bg-white/40 rounded-sm" />
-                    </div>
-                 ))}
-               </div>
+      {/* POPULAR KIDS STYLES */}
+      <section className="py-24 px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
+            <h2 className="text-4xl font-display text-gray-900">Popular Mini Styles</h2>
+            <div className="flex gap-4 p-1 bg-gray-100 rounded-full">
+               <button className="px-6 py-2 bg-zuzu-pink text-white rounded-full text-xs font-bold shadow-md">All Styles</button>
+               <button className="px-6 py-2 text-gray-400 text-xs font-bold hover:text-gray-900 transition-all">For Boys</button>
+               <button className="px-6 py-2 text-gray-400 text-xs font-bold hover:text-gray-900 transition-all">For Girls</button>
             </div>
-            
-            <div className="md:col-span-2">
-              <h4 className="font-display text-2xl mb-10">Explore</h4>
-              <ul className="space-y-6 opacity-70 font-body text-sm">
-                <li><Link href="#" className="hover:opacity-100 transition-opacity">About Us</Link></li>
-                <li><Link href="#" className="hover:opacity-100 transition-opacity">Collections</Link></li>
-                <li><Link href="#" className="hover:opacity-100 transition-opacity">Size Guide</Link></li>
-                <li><Link href="#" className="hover:opacity-100 transition-opacity">Store Locator</Link></li>
-              </ul>
-            </div>
+          </div>
 
-            <div className="md:col-span-5">
-              <h4 className="font-display text-2xl mb-10">Join Our Universe</h4>
-              <p className="opacity-70 text-sm mb-10 font-body">Subscribe for early access to drops and exclusive offers.</p>
-              <div className="flex gap-3 p-2 bg-white/10 rounded-full border border-white/20 focus-within:border-white/50 transition-all">
-                <input type="email" placeholder="Email address" className="bg-transparent px-6 py-3 flex-grow outline-none placeholder:text-white/40 text-sm" />
-                <button className="px-8 py-3 bg-white text-zuzu-purple rounded-full font-bold text-sm hover:bg-zuzu-pink hover:text-white transition-all">
-                  Join
-                </button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {products?.slice(0, 8).map((product) => (
+              <div key={product._id} className="product-card group cursor-pointer border border-gray-100 rounded-2xl p-4 hover:shadow-xl transition-all">
+                <div className="aspect-[4/5] bg-gray-50 rounded-xl overflow-hidden mb-4 relative">
+                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                </div>
+                <div className="flex flex-col items-center">
+                   <div className="flex gap-1 text-zuzu-yellow mb-2">
+                     {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
+                   </div>
+                   <h3 className="text-md font-display text-gray-900 mb-1">{product.name}</h3>
+                   <p className="text-zuzu-purple font-bold text-sm">₹{product.price}</p>
+                </div>
               </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center gap-4">
+             <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&lt;</button>
+             <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&gt;</button>
+          </div>
+        </div>
+      </section>
+
+
+      {/* NEWSLETTER */}
+      <section className="relative py-48 bg-zuzu-purple overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-32 bg-white cloud-top" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-white cloud-separator" />
+        
+        <div className="max-w-2xl mx-auto text-center relative z-10 px-8">
+           <h2 className="text-5xl font-display text-white mb-8">Join the Zuzu Universe</h2>
+           <p className="text-white/70 mb-12 font-body">Be the first to hear about new drops and exclusive member-only styles.</p>
+           <div className="flex flex-col sm:flex-row gap-4">
+             <input type="email" placeholder="Your best email" className="flex-grow px-8 py-5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 outline-none focus:border-white/50 transition-all" />
+             <button className="px-10 py-5 bg-zuzu-pink text-white rounded-full font-bold shadow-xl">Join Now</button>
+           </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="pt-24 pb-12 px-8 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+          <div>
+            <Link href="/" className="flex items-center mb-8">
+              <Logo className="w-56 h-16" variant="horizontal" />
+            </Link>
+            <p className="text-gray-400 text-sm leading-relaxed mb-8">
+              Premium sustainable kidswear, crafted with love for the dreamers of tomorrow. Quality is our promise.
+            </p>
+            <div className="flex gap-4">
+              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
+              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
+              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
+              <Globe className="w-5 h-5 text-gray-300 hover:text-zuzu-purple cursor-pointer transition-colors" />
             </div>
           </div>
           
-          <div className="pt-20 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-10 opacity-50 text-[10px] uppercase tracking-widest font-bold">
-            <p>© 2024 Zuzu Minis Studio. All Rights Reserved.</p>
-            <div className="flex gap-10">
-              <Link href="#">Privacy Policy</Link>
-              <Link href="#">Terms of Service</Link>
-              <Link href="#">Refund Policy</Link>
-            </div>
+          <div>
+            <h4 className="font-display text-xl mb-8 text-gray-900">Universe</h4>
+            <ul className="space-y-4 text-sm text-gray-400 font-bold uppercase tracking-widest text-[10px]">
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Our Story</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Sustainability</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Care Guide</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Privacy</Link></li>
+            </ul>
           </div>
+
+          <div>
+            <h4 className="font-display text-xl mb-8 text-gray-900">Support</h4>
+            <ul className="space-y-4 text-sm text-gray-400 font-bold uppercase tracking-widest text-[10px]">
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Track Order</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Exchanges</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Size Chart</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Shipping</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display text-xl mb-8 text-gray-900">Explore</h4>
+            <ul className="space-y-4 text-sm text-gray-400 font-bold uppercase tracking-widest text-[10px]">
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Shop All</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">New Arrivals</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Best Sellers</Link></li>
+              <li><Link href="#" className="hover:text-zuzu-purple transition-colors">Gift Cards</Link></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-gray-300 font-bold uppercase tracking-widest">
+           <p>© 2024 Zuzu Minis Studio. All Rights Reserved.</p>
+           <div className="flex gap-6">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-4 grayscale opacity-30" alt="Visa" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-4 grayscale opacity-30" alt="Mastercard" />
+           </div>
         </div>
       </footer>
     </main>

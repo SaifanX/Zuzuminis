@@ -1,35 +1,51 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { Search, ShoppingCart, User, Phone, Mail } from "lucide-react";
 import { Logo } from "./Logo";
 
 export function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm border-b border-gray-100 flex flex-col pointer-events-none">
-      {/* Top bar (Promotion) */}
-      <div className="bg-zuzu-purple text-white text-[10px] py-1 text-center font-body tracking-wider uppercase">
-        Free shipping on orders over ₹1999!
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      {/* Top Bar */}
+      <div className="bg-zuzu-purple text-white py-2 px-8 flex justify-between items-center text-[10px] font-bold tracking-widest">
+        <div className="flex gap-6 uppercase">
+          <span className="flex items-center gap-2">
+            <span className="opacity-70">📞</span> +91 97408 24499
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="opacity-70">✉️</span> HELLO@ZUZUMINIS.COM
+          </span>
+        </div>
+        <div className="hidden sm:block">
+          FREE SHIPPING ON ALL ORDERS OVER ₹999
+        </div>
+        <div className="flex gap-6">
+          {/* Removed Login/Register */}
+        </div>
       </div>
-      
-      <div className="flex justify-between items-center px-8 md:px-16 py-4 pointer-events-auto">
-        <Link href="/" className="flex items-center gap-2">
-          <Logo className="w-10 h-10" />
-          <span className="font-display text-2xl tracking-tighter text-zuzu-purple">zuzu</span>
+
+      <div className="bg-white py-4 px-8 flex justify-between items-center shadow-sm">
+        <Link href="/" className="flex items-center">
+          <Logo className="w-48 h-12" variant="horizontal" />
         </Link>
 
-        <div className="hidden lg:flex items-center gap-10">
-          <Link href="/" className="text-sm font-body hover:text-zuzu-purple transition-colors">Home</Link>
-          <Link href="/shop" className="text-sm font-body hover:text-zuzu-purple transition-colors">Shop All</Link>
-          <Link href="/about" className="text-sm font-body hover:text-zuzu-purple transition-colors">Our Story</Link>
-          <Link href="/contact" className="text-sm font-body hover:text-zuzu-purple transition-colors">Contact</Link>
+        <div className="hidden md:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-gray-900">
+          <Link href="/" className="hover:text-zuzu-purple transition-colors">Home</Link>
+          <Link href="#" className="hover:text-zuzu-purple transition-colors">Shop</Link>
+          <Link href="#" className="hover:text-zuzu-purple transition-colors">Collections</Link>
+          <Link href="#" className="hover:text-zuzu-purple transition-colors">New Arrivals</Link>
+          <Link href="#" className="hover:text-zuzu-purple transition-colors">Offer</Link>
+          <Link href="#" className="hover:text-zuzu-purple transition-colors">Blog</Link>
         </div>
 
-        <div className="flex gap-6 items-center">
-          <button className="relative p-2">
-            <ShoppingBag className="w-5 h-5 text-gray-700" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-zuzu-pink text-white text-[8px] flex items-center justify-center rounded-full">0</span>
-          </button>
+        <div className="flex items-center gap-6 text-gray-900">
+          <button className="hover:text-zuzu-purple transition-all"><Search className="w-5 h-5" /></button>
+          <div className="relative">
+            <button className="hover:text-zuzu-purple transition-all"><ShoppingCart className="w-5 h-5" /></button>
+            <span className="absolute -top-2 -right-2 bg-zuzu-pink text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+          </div>
+          <button className="hover:text-zuzu-purple transition-all"><User className="w-5 h-5" /></button>
         </div>
       </div>
     </nav>

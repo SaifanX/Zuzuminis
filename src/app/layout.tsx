@@ -31,9 +31,19 @@ const kiddos = localFont({
   variable: "--font-kiddos",
 });
 
+import { CursorGlitter } from "@/components/CursorGlitter";
+
 export const metadata: Metadata = {
   title: "Zuzu Minis | Premium Kidswear",
   description: "Hand-crafted comfort for your little ones.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=10" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -45,6 +55,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${searghy.variable} ${kiddos.variable} ${outfit.variable} antialiased`}>
         <ConvexClientProvider>
+          <CursorGlitter />
           {children}
         </ConvexClientProvider>
       </body>
