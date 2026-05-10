@@ -61,12 +61,12 @@ export default function Home() {
   }, { scope: container, dependencies: [products] });
 
   return (
-    <main ref={container} className="relative overflow-x-hidden bg-white selection:bg-zuzu-purple selection:text-white">
+    <main ref={container} className="relative overflow-x-hidden bg-butter selection:bg-zuzu-blue selection:text-white">
       <GrainOverlay />
       <Navbar />
 
       {/* HERO SECTION */}
-      <section className="relative min-h-[85vh] bg-zuzu-purple pt-48 pb-32 px-8 flex items-center overflow-hidden">
+      <section className="relative min-h-[85vh] bg-zuzu-blue pt-48 pb-32 px-8 flex items-center overflow-hidden">
         <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-20 items-center relative z-10">
           <div className="hero-content text-white">
             <h1 className="text-6xl md:text-8xl font-display leading-[1.1] mb-8">
@@ -111,12 +111,12 @@ export default function Home() {
             { label: "2-3", sub: "Toddlers", gradient: "from-[#6BCB77] to-[#95E1D3]", shadow: "shadow-green-100" },
             { label: "3-4", sub: "Pre-School", gradient: "from-[#FFD93D] to-[#FFEA85]", shadow: "shadow-yellow-100" },
             { label: "4-5", sub: "Early Years", gradient: "from-[#FF9248] to-[#FFB385]", shadow: "shadow-orange-100" },
-            { label: "5-7", sub: "Minis", gradient: "from-[#9D50BB] to-[#6E48AA]", shadow: "shadow-purple-100" },
+            { label: "5-7", sub: "Minis", gradient: "from-[#FF66A1] to-[#FF92BC]", shadow: "shadow-pink-100" },
           ].map((cat, i) => (
             <Link href="/shop" key={i} className="flex flex-col items-center gap-6 group cursor-pointer">
               <div className="relative group-hover:scale-110 transition-transform duration-500">
                 {/* Secondary Outer Ring */}
-                <div className="absolute -inset-2 border-2 border-dashed border-gray-200 rounded-full opacity-50 group-hover:border-zuzu-purple transition-all duration-500" />
+                <div className="absolute -inset-2 border-2 border-dashed border-gray-200 rounded-full opacity-50 group-hover:border-zuzu-orange transition-all duration-500" />
                 
                 <div className={`category-circle w-32 h-32 rounded-full bg-gradient-to-br ${cat.gradient} flex items-center justify-center text-white text-3xl font-display shadow-xl ${cat.shadow} relative overflow-hidden`}>
                   {/* Inner Glow */}
@@ -125,8 +125,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-zuzu-purple transition-colors">{cat.sub}</p>
-                <div className="h-1 w-0 bg-zuzu-purple mx-auto rounded-full group-hover:w-full transition-all duration-300" />
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-zuzu-orange transition-colors">{cat.sub}</p>
+                <div className="h-1 w-0 bg-zuzu-orange mx-auto rounded-full group-hover:w-full transition-all duration-300" />
               </div>
             </Link>
           ))}
@@ -134,13 +134,13 @@ export default function Home() {
       </section>
 
       {/* NEW ARRIVALS */}
-      <section className="py-24 px-8 bg-white">
+      <section className="py-24 px-8 bg-butter">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-16">
             <h2 className="text-4xl font-display text-gray-900">New Arrivals</h2>
             <div className="flex gap-4">
-               <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&lt;</button>
-               <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&gt;</button>
+               <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-blue hover:text-white transition-all">&lt;</button>
+               <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-blue hover:text-white transition-all">&gt;</button>
             </div>
           </div>
 
@@ -158,7 +158,7 @@ export default function Home() {
                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
                    </div>
                    <h3 className="text-lg font-display text-gray-900 mb-2">{product.name}</h3>
-                   <p className="text-zuzu-purple font-bold">₹{product.price}</p>
+                   <p className="text-zuzu-orange font-bold">₹{product.price}</p>
                 </div>
               </div>
             ))}
@@ -221,24 +221,24 @@ export default function Home() {
                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
                    </div>
                    <h3 className="text-md font-display text-gray-900 mb-1">{product.name}</h3>
-                   <p className="text-zuzu-purple font-bold text-sm">₹{product.price}</p>
+                   <p className="text-zuzu-orange font-bold text-sm">₹{product.price}</p>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="flex justify-center gap-4">
-             <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&lt;</button>
-             <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-purple hover:text-white transition-all">&gt;</button>
+             <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-blue hover:text-white transition-all">&lt;</button>
+             <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-zuzu-blue hover:text-white transition-all">&gt;</button>
           </div>
         </div>
       </section>
 
 
       {/* NEWSLETTER */}
-      <section className="relative py-48 bg-zuzu-purple overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-32 bg-white cloud-top" />
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-white cloud-separator" />
+      <section className="relative py-48 bg-zuzu-blue overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-32 bg-butter cloud-top" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-butter cloud-separator" />
         
         <div className="max-w-2xl mx-auto text-center relative z-10 px-8">
            <h2 className="text-5xl font-display text-white mb-8">Join the Zuzu Universe</h2>

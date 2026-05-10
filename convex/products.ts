@@ -8,6 +8,7 @@ export const list = query({
     category: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // Explicitly handle filters to avoid schema mismatches
     return await ctx.db.query("products").filter((q) => {
       const conditions = [];
       if (args.ageGroup && args.ageGroup !== "All") conditions.push(q.eq(q.field("ageGroup"), args.ageGroup));

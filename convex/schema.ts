@@ -14,8 +14,8 @@ export default defineSchema({
     details: v.optional(v.string()),
     ageGroup: v.optional(v.string()), // e.g., "0-1", "1-2"
     gender: v.optional(v.string()),   // e.g., "Boy", "Girl", "Unisex"
-    position: v.array(v.number()), // [x, y, z]
-    rotation: v.array(v.number()), // [x, y, z]
+    position: v.optional(v.array(v.number())), // [x, y, z]
+    rotation: v.optional(v.array(v.number())), // [x, y, z]
   }).index("by_slug", ["slug"]),
   
   cartItems: defineTable({

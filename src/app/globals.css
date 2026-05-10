@@ -1,18 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-zuzu-purple: #7E49FF;
   --color-zuzu-pink: #FF66A1;
   --color-zuzu-blue: #00D1FF;
   --color-zuzu-yellow: #FFD200;
-  --color-zuzu-teal: #00E5BC;
-  --color-butter: #FDFCF9;
+  --color-zuzu-orange: #FF9D66;
+  --color-butter: #FFFBEB;
   --font-display: var(--font-kiddos), var(--font-outfit), sans-serif;
   --font-body: var(--font-outfit), sans-serif;
 }
 
 :root {
-  --background: #FFFFFF;
+  --background: var(--color-butter);
   --foreground: #2D2D2D;
 }
 

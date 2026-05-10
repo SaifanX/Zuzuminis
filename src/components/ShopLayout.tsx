@@ -38,7 +38,7 @@ export function ShopLayout() {
         <input 
           type="text" 
           placeholder="Search minis..." 
-          className="w-full pl-10 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-zuzu-purple text-sm font-medium outline-none transition-shadow"
+          className="w-full pl-10 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-zuzu-blue text-sm font-medium outline-none transition-shadow"
         />
       </div>
 
@@ -53,9 +53,9 @@ export function ShopLayout() {
                 name="category" 
                 checked={category === cat}
                 onChange={() => setCategory(cat)}
-                className="w-4 h-4 text-zuzu-purple focus:ring-zuzu-purple border-gray-300" 
+                className="w-4 h-4 text-zuzu-orange focus:ring-zuzu-orange border-gray-300" 
               />
-              <span className="group-hover:text-zuzu-purple transition-colors">{cat}</span>
+              <span className="group-hover:text-zuzu-orange transition-colors">{cat}</span>
             </label>
           ))}
         </div>
@@ -71,7 +71,7 @@ export function ShopLayout() {
               onClick={() => setAgeGroup(age)}
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
                 ageGroup === age 
-                  ? "bg-zuzu-purple text-white shadow-md" 
+                  ? "bg-zuzu-blue text-white shadow-md" 
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
@@ -104,8 +104,16 @@ export function ShopLayout() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 md:py-24">
-      {/* Mobile Top Bar */}
+    <div className="relative overflow-hidden">
+      {/* Background Blobs for Color */}
+      <div className="absolute top-0 left-0 w-full h-[600px] pointer-events-none opacity-30 z-0">
+        <div className="absolute -top-40 -left-20 w-[600px] h-[600px] bg-zuzu-blue rounded-full blur-[150px] opacity-40" />
+        <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-zuzu-pink rounded-full blur-[150px] opacity-40" />
+        <div className="absolute top-80 left-1/2 w-[400px] h-[400px] bg-zuzu-yellow rounded-full blur-[120px] opacity-30" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-12 md:py-24 relative z-10">
+        {/* Mobile Top Bar */}
       <div className="md:hidden flex justify-between items-center mb-8 sticky top-[72px] bg-white/80 backdrop-blur-md z-40 py-4 -mx-6 px-6 border-b border-gray-100">
         <h1 className="text-2xl font-display">Shop All</h1>
         <button 
@@ -154,7 +162,7 @@ export function ShopLayout() {
           ) : products.length === 0 ? (
             <div className="text-center py-24">
               <p className="text-gray-500 font-medium">No minis found matching these filters.</p>
-              <button onClick={() => { setAgeGroup("All"); setGender("All"); setCategory("All"); }} className="mt-4 text-zuzu-purple font-bold hover:underline">
+              <button onClick={() => { setAgeGroup("All"); setGender("All"); setCategory("All"); }} className="mt-4 text-zuzu-orange font-bold hover:underline">
                 Clear Filters
               </button>
             </div>
@@ -169,6 +177,7 @@ export function ShopLayout() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -12,9 +12,11 @@ interface ProductCardProps {
   };
 }
 
+import Link from "next/link";
+
 export function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className="product-card group cursor-pointer flex flex-col h-full">
+    <Link href={`/product/${product.slug}`} className="product-card group cursor-pointer flex flex-col h-full block">
       <div className="aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden mb-6 relative">
         <img 
           src={product.images[0]} 
@@ -24,8 +26,8 @@ export function ProductCard({ product }: ProductCardProps) {
         
         {/* Hover overlay with Add to Cart */}
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-          <button className="bg-white text-zuzu-purple font-bold py-3 px-6 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-zuzu-purple hover:text-white">
-            Quick Add
+          <button className="bg-white text-zuzu-blue font-bold py-3 px-6 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-zuzu-blue hover:text-white">
+            Quick Add +
           </button>
         </div>
 
@@ -42,8 +44,8 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         <h3 className="text-lg font-display text-gray-900 mb-1">{product.name}</h3>
         <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">{product.category}</p>
-        <p className="text-zuzu-purple font-bold text-lg">₹{product.price}</p>
+        <p className="text-zuzu-orange font-bold text-lg">₹{product.price}</p>
       </div>
-    </div>
+    </Link>
   );
 }
