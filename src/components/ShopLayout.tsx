@@ -4,17 +4,22 @@ import { useState, useRef } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ProductCard } from "./ProductCard";
+import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Filter, Search, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export function ShopLayout() {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("q") || undefined;
+  
   const [ageGroup, setAgeGroup] = useState<string>("All");
   const [gender, setGender] = useState<string>("All");
   const [category, setCategory] = useState<string>("All");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-  const products = useQuery(api.products.list, { ageGroup, gender, category });
+  const products = useQuery(api.products.list, { ageGroup, gender, category, search });
   const gridRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -153,6 +158,14 @@ export function ShopLayout() {
 
         {/* Product Grid */}
         <div className="flex-grow" ref={gridRef}>
+          {search && (
+            <div className="mb-8 flex items-center justify-between bg-white/50 p-4 rounded-2xl border border-black/5">
+              <p className="text-gray-500 font-medium">
+                Showing results for <span className="text-gray-900 font-bold">"{search}"</span>
+              </p>
+              <Link href="/shop" className="text-zuzu-blue text-sm font-bold hover:underline">Clear Search</Link>
+            </div>
+          )}
           {products === undefined ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(6)].map((_, i) => (

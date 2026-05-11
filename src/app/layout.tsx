@@ -32,6 +32,10 @@ const kiddos = localFont({
 });
 
 import { CursorGlitter } from "@/components/CursorGlitter";
+import { CartProvider } from "@/context/CartContext";
+import { CartDrawer } from "@/components/CartDrawer";
+import { UserSync } from "@/components/UserSync";
+import { ChildOnboarding } from "@/components/ChildOnboarding";
 
 export const metadata: Metadata = {
   title: "Zuzu Minis | Premium Kidswear",
@@ -55,8 +59,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${searghy.variable} ${kiddos.variable} ${outfit.variable} antialiased`}>
         <ConvexClientProvider>
-          <CursorGlitter />
-          {children}
+          <CartProvider>
+            <UserSync />
+            <ChildOnboarding />
+            <CursorGlitter />
+            <CartDrawer />
+            {children}
+          </CartProvider>
         </ConvexClientProvider>
       </body>
     </html>

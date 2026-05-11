@@ -1,17 +1,22 @@
 import { useState } from "react";
 import { Star, Heart, Share2, Ruler, ShoppingCart, X } from "lucide-react";
 
+import { useCart } from "@/context/CartContext";
+
 interface ProductInfoProps {
   product: {
     _id: string;
     name: string;
     price: number;
     description: string;
+    images: string[];
+    slug: string;
     details?: string;
   };
 }
 
 export function ProductInfo({ product }: ProductInfoProps) {
+  const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("default");
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
@@ -41,6 +46,23 @@ export function ProductInfo({ product }: ProductInfoProps) {
     }
   };
 
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      alert("Please select a size first!");
+      return;
+    }
+    
+    addToCart({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug,
+      quantity: 1,
+      size: selectedSize
+    });
+  };
+
   return (
     <div className="flex flex-col h-full py-4 md:py-10 md:px-8">
       {/* Reviews & Badges */}
@@ -50,12 +72,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
           <span className="text-gray-400 text-sm ml-2">(42 reviews)</span>
         </div>
         <div className="flex gap-3">
-          <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors group">
+          <button className="w-10 h-10 rounded-full bg-butter border border-black/5 flex items-center justify-center hover:bg-zuzu-pink hover:text-white transition-colors group">
             <Heart className="w-4 h-4 group-hover:scale-110 transition-transform" />
           </button>
           <button 
             onClick={handleShare}
-            className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-zuzu-blue hover:text-white transition-colors group"
+            className="w-10 h-10 rounded-full bg-butter border border-black/5 flex items-center justify-center hover:bg-zuzu-blue hover:text-white transition-colors group"
           >
             <Share2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
           </button>
@@ -108,8 +130,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
               onClick={() => setSelectedSize(size)}
               className={`py-3 rounded-xl font-bold text-sm transition-all ${
                 selectedSize === size 
-                  ? "bg-gray-900 text-white shadow-lg scale-105" 
-                  : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                  ? "bg-zuzu-blue text-white shadow-lg scale-105" 
+                  : "bg-white/50 text-gray-600 hover:bg-white border border-black/5"
               }`}
             >
               {size}
@@ -122,10 +144,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       <div className="mt-auto pt-8 border-t border-gray-100">
         <button 
           className="w-full py-5 bg-zuzu-pink text-white rounded-full font-bold text-lg shadow-xl shadow-pink-200 hover:scale-[1.02] transition-transform flex items-center justify-center gap-3 active:scale-95"
-          onClick={() => {
-            if (!selectedSize) alert("Please select a size first!");
-            else alert("Added to cart! (Glitter effect coming soon)");
-          }}
+          onClick={handleAddToCart}
         >
           <ShoppingCart className="w-6 h-6" />
           Add to Cart - ₹{product.price}

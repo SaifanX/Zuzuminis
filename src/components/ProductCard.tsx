@@ -3,6 +3,7 @@
 import { Heart, Star } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "@/context/CartContext";
 
 interface ProductCardProps {
   product: {
@@ -16,6 +17,21 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      slug: product.slug,
+      quantity: 1
+    });
+  };
+
   return (
     <Link href={`/product/${product.slug}`} className="product-card group cursor-pointer flex flex-col h-full block">
       <div className="aspect-[4/5] bg-butter rounded-2xl overflow-hidden mb-6 relative border border-black/5 shadow-sm">
@@ -29,7 +45,10 @@ export function ProductCard({ product }: ProductCardProps) {
         
         {/* Hover overlay with Add to Cart */}
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-          <button className="bg-butter text-zuzu-blue font-bold py-3 px-6 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-zuzu-blue hover:text-white">
+          <button 
+            onClick={handleAddToCart}
+            className="bg-butter text-zuzu-blue font-bold py-3 px-6 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-zuzu-blue hover:text-white"
+          >
             Quick Add +
           </button>
         </div>

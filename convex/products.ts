@@ -6,10 +6,11 @@ export const list = query({
     ageGroup: v.optional(v.string()),
     gender: v.optional(v.string()),
     category: v.optional(v.string()),
+    search: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     // Explicitly handle filters to avoid schema mismatches
-    return await ctx.db.query("products").filter((q) => {
+    const products = await ctx.db.query("products").filter((q) => {
       const conditions = [];
       if (args.ageGroup && args.ageGroup !== "All") conditions.push(q.eq(q.field("ageGroup"), args.ageGroup));
       if (args.gender && args.gender !== "All") conditions.push(q.eq(q.field("gender"), args.gender));
@@ -19,6 +20,16 @@ export const list = query({
       if (conditions.length === 1) return conditions[0];
       return q.and(...conditions as [any, any, ...any[]]);
     }).collect();
+
+    if (args.search) {
+      const s = args.search.toLowerCase();
+      return products.filter((p) => 
+        p.name.toLowerCase().includes(s) || 
+        p.category.toLowerCase().includes(s)
+      );
+    }
+
+    return products;
   },
 });
 
@@ -37,7 +48,11 @@ export const seed = mutation({
   args: {},
   handler: async (ctx) => {
     const existing = await ctx.db.query("products").collect();
-    if (existing.length > 0) return;
+    if (existing.length > 0) {
+      for (const product of existing) {
+        await ctx.db.delete(product._id);
+      }
+    }
 
     const products = [
       {
@@ -49,6 +64,8 @@ export const seed = mutation({
         images: ["/assets/product1.png"],
         slug: "cloud-cotton-night-suit",
         isFeatured: true,
+        ageGroup: "2-3",
+        gender: "Unisex",
         position: [5, 0, -10],
         rotation: [0, 0.5, 0],
       },
@@ -61,32 +78,10 @@ export const seed = mutation({
         images: ["/assets/product2.png"],
         slug: "botanical-garden-set",
         isFeatured: true,
+        ageGroup: "3-4",
+        gender: "Girl",
         position: [-8, 2, -25],
         rotation: [0, -0.8, 0],
-      },
-      {
-        name: "Azure Breeze Romper",
-        description: "Cool linen blend in a soothing zuzu blue.",
-        price: 1899,
-        category: "Casuals",
-        inventory: 25,
-        images: ["/assets/product3.png"],
-        slug: "azure-breeze-romper",
-        isFeatured: true,
-        position: [12, -1, -40],
-        rotation: [0, 0.3, 0],
-      },
-      {
-        name: "Petal Soft Onesie",
-        description: "Delicate pink hues for the softest skin.",
-        price: 999,
-        category: "Essentials",
-        inventory: 100,
-        images: ["/assets/product4.png"],
-        slug: "petal-soft-onesie",
-        isFeatured: true,
-        position: [-5, 3, -55],
-        rotation: [0, 1.2, 0],
       }
     ];
 

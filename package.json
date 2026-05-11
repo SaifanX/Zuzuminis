@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.3.3",
+    "@clerk/themes": "^2.4.57",
     "@gsap/react": "^2.1.2",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
@@ -23,6 +25,7 @@
     "postprocessing": "^6.39.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "svix": "^1.93.0",
     "tailwind-merge": "^3.5.0",
     "three": "^0.184.0"
   },

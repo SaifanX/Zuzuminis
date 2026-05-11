@@ -40,4 +40,18 @@ export default defineSchema({
       phone: v.string(),
     }),
   }).index("by_user", ["userId"]),
+
+  users: defineTable({
+    clerkId: v.string(),
+    email: v.string(),
+    name: v.optional(v.string()),
+    points: v.optional(v.number()),
+  }).index("by_clerk_id", ["clerkId"]),
+
+  children: defineTable({
+    userId: v.string(), // clerkId
+    name: v.string(),
+    birthday: v.string(),
+    gender: v.string(),
+  }).index("by_user", ["userId"]),
 });
