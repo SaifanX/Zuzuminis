@@ -11,6 +11,7 @@
 import type * as orders from "../orders.js";
 import type * as products from "../products.js";
 import type * as search from "../search.js";
+import type * as subscribers from "../subscribers.js";
 import type * as users from "../users.js";
 
 import type {
@@ -23,6 +24,7 @@ declare const fullApi: ApiFromModules<{
   orders: typeof orders;
   products: typeof products;
   search: typeof search;
+  subscribers: typeof subscribers;
   users: typeof users;
 }>;
 

@@ -54,4 +54,9 @@ export default defineSchema({
     birthday: v.string(),
     gender: v.string(),
   }).index("by_user", ["userId"]),
+
+  subscribers: defineTable({
+    phone: v.string(),
+    createdAt: v.number(),
+  }).index("by_phone", ["phone"]),
 });
