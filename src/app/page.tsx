@@ -17,6 +17,7 @@ import { Footer } from "@/components/Footer";
 import { HeroBento, Cloud, Squiggle } from "@/components/HeroBento";
 import { ProductCard } from "@/components/ProductCard";
 import { motion } from "framer-motion";
+import { WobblyNewsletterBg } from "@/components/WobblyNewsletterBg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -186,23 +187,22 @@ export default function Home() {
       </section>
 
       {/* NEWSLETTER */}
-      <section className="relative py-48 bg-zuzu-blue overflow-hidden relative z-10">
-        <div className="absolute top-0 left-0 w-full h-32 bg-butter cloud-top" />
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-butter cloud-separator" />
+      <section className="relative py-48 overflow-hidden z-10">
+        <WobblyNewsletterBg />
 
-        <div className="max-w-2xl mx-auto text-center relative z-10 px-8">
-          <h2 className="text-5xl font-display text-white mb-8">Join the Zuzu Universe</h2>
-          <p className="text-white/70 mb-12 font-body">Be the first to hear about new drops and exclusive member-only styles.</p>
+        {/* TOP/BOTTOM CLOUD TRANSITIONS */}
+        <div className="absolute top-0 left-0 w-full h-32 bg-butter cloud-top z-30" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-butter cloud-separator z-30" />
+
+        <div className="max-w-2xl mx-auto text-center relative z-40 px-8">
+          <h2 className="text-5xl font-display text-white mb-8 drop-shadow-lg">Join the Zuzu Universe</h2>
+          <p className="text-white/90 mb-12 font-body font-medium drop-shadow-md">Be the first to hear about new drops and exclusive member-only styles.</p>
           
           {isSubscribed ? (
-            <motion.div 
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30"
-            >
+            <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30">
               <h3 className="text-2xl font-display text-white">You're in! 🚀</h3>
               <p className="text-white/80 mt-2">Get ready for something mini and magical.</p>
-            </motion.div>
+            </div>
           ) : (
             <div className="flex flex-col sm:flex-row gap-4">
               <input 
@@ -210,7 +210,7 @@ export default function Home() {
                 value={phone}
                 onChange={handlePhoneChange}
                 placeholder="Your mobile number" 
-                className="flex-grow px-8 py-5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 outline-none focus:border-white/50 transition-all" 
+                className="flex-grow px-8 py-5 rounded-full bg-white/20 border border-white/30 text-white placeholder:text-white/60 outline-none focus:border-white/50 transition-all backdrop-blur-sm" 
               />
               <button 
                 onClick={handleSubscribe}
