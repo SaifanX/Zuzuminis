@@ -56,7 +56,11 @@ export function Navbar() {
                 { name: "Girl", img: "/assets/products/product_sundress.png" },
                 { name: "Boy", img: "/assets/products/product_pantset.png" }
               ].map((cat) => (
-                <Link href={`/shop?category=${cat.name.toLowerCase()}`} key={cat.name} className="flex items-center gap-2 group">
+                <Link 
+                  href={cat.name === "Baby" ? "/shop?ageGroup=0-1" : `/shop?gender=${cat.name}`} 
+                  key={cat.name} 
+                  className="flex items-center gap-2 group"
+                >
                   <div className="w-8 h-8 rounded-full overflow-hidden border border-black/10 group-hover:border-zuzu-blue transition-colors">
                     <img src={cat.img} alt={cat.name} className="w-full h-full object-cover" />
                   </div>

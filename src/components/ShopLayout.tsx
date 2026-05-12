@@ -14,10 +14,23 @@ export function ShopLayout() {
   const searchParams = useSearchParams();
   const search = searchParams.get("q") || undefined;
   
-  const [ageGroup, setAgeGroup] = useState<string>("All");
-  const [gender, setGender] = useState<string>("All");
-  const [category, setCategory] = useState<string>("All");
+  // Initialize state from URL params if they exist
+  const [ageGroup, setAgeGroup] = useState<string>(searchParams.get("ageGroup") || "All");
+  const [gender, setGender] = useState<string>(searchParams.get("gender") || "All");
+  const [category, setCategory] = useState<string>(searchParams.get("category") || "All");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  // Sync state with URL if it changes (e.g. from navbar links)
+  const prevParams = useRef(searchParams.toString());
+  if (searchParams.toString() !== prevParams.current) {
+    const newAge = searchParams.get("ageGroup") || "All";
+    const newGender = searchParams.get("gender") || "All";
+    const newCat = searchParams.get("category") || "All";
+    if (newAge !== ageGroup) setAgeGroup(newAge);
+    if (newGender !== gender) setGender(newGender);
+    if (newCat !== category) setCategory(newCat);
+    prevParams.current = searchParams.toString();
+  }
 
   const products = useQuery(api.products.list, { ageGroup, gender, category, search });
   const gridRef = useRef<HTMLDivElement>(null);

@@ -72,46 +72,6 @@ export default function Home() {
       {/* THE BENTO HERO (Replaces standard hero) */}
       <HeroBento />
 
-      {/* SHOP BY AGE */}
-      <section className="categories-section py-32 px-8 text-center relative overflow-hidden bg-butter/50">
-        {/* Background Blobs for Color */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30">
-          <div className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-zuzu-blue rounded-full blur-[120px]" />
-          <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-zuzu-pink rounded-full blur-[120px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-zuzu-yellow rounded-full blur-[150px] opacity-50" />
-        </div>
-
-        <h2 className="text-4xl md:text-5xl font-display mb-20 text-gray-900 relative z-10">Shop Styles by Age</h2>
-
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-10 md:gap-14 relative z-10">
-          {[
-            { label: "0-1", sub: "Newborns", gradient: "from-[#FF6B6B] to-[#FF8E8E]", shadow: "shadow-red-100" },
-            { label: "1-2", sub: "Infants", gradient: "from-[#4D96FF] to-[#6BCBFF]", shadow: "shadow-blue-100" },
-            { label: "2-3", sub: "Toddlers", gradient: "from-[#6BCB77] to-[#95E1D3]", shadow: "shadow-green-100" },
-            { label: "3-4", sub: "Pre-School", gradient: "from-[#FFD93D] to-[#FFEA85]", shadow: "shadow-yellow-100" },
-            { label: "4-5", sub: "Early Years", gradient: "from-[#FF9248] to-[#FFB385]", shadow: "shadow-orange-100" },
-            { label: "5-7", sub: "Minis", gradient: "from-[#FF66A1] to-[#FF92BC]", shadow: "shadow-pink-100" },
-          ].map((cat, i) => (
-            <Link href="/shop" key={i} className="flex flex-col items-center gap-6 group cursor-pointer">
-              <div className="relative group-hover:scale-110 transition-transform duration-500">
-                {/* Secondary Outer Ring */}
-                <div className="absolute -inset-2 border-2 border-dashed border-zuzu-blue/20 rounded-full group-hover:border-zuzu-orange transition-all duration-500" />
-
-                <div className={`category-circle w-32 h-32 rounded-full bg-gradient-to-br ${cat.gradient} flex items-center justify-center text-white text-3xl font-display shadow-xl ${cat.shadow} relative overflow-hidden`}>
-                  {/* Inner Glow */}
-                  <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="relative z-10">{cat.label}</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-zuzu-orange transition-colors">{cat.sub}</p>
-                <div className="h-1 w-0 bg-zuzu-orange mx-auto rounded-full group-hover:w-full transition-all duration-300" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* NEW ARRIVALS */}
       <section className="py-24 px-8 bg-butter">
         <div className="max-w-7xl mx-auto">

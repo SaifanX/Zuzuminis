@@ -38,40 +38,46 @@ export function HeroBento() {
           </div>
 
           <div className="flex flex-col gap-4 mt-2">
-            <h2 className="text-center font-display text-black text-sm tracking-widest uppercase">On Everyone's Radar</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {/* Hot Bestsellers */}
-              <Link href="/shop" className="relative h-40 bg-[#E8F5E9] border border-black/10 rounded-2xl overflow-hidden group shadow-sm p-4 flex flex-col justify-between">
-                <div className="relative z-10">
-                  <span className="text-[10px] font-bold text-black uppercase tracking-wider block mb-1">Hot Bestsellers</span>
-                  <div className="flex items-start text-black">
-                    <span className="text-xl font-bold mt-1">UP TO</span>
-                    <span className="text-4xl font-display leading-none ml-1">50<span className="text-xl">%</span></span>
-                  </div>
-                  <span className="text-[10px] font-bold text-black uppercase block mt-1">OFF</span>
+            <h2 className="text-center font-display text-black text-sm tracking-widest uppercase">Curated Mini Edits</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {/* Curated Item 1: The Essential */}
+              <Link href="/shop?gender=Boy&category=Tees & Polos" className="group relative h-44 bg-white border border-black/10 rounded-2xl overflow-hidden shadow-sm p-4 flex flex-col justify-between">
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-2 py-0.5 bg-zuzu-pink text-white text-[8px] font-bold uppercase tracking-widest rounded-full">Stylist Pick</span>
                 </div>
-                <div className="absolute -bottom-4 -right-4 w-24 h-24 opacity-40">
+                <div className="relative w-full h-24 mt-2">
                   <Image 
-                    src="/assets/products/product_tee.png" 
-                    alt="Bestsellers" 
+                    src="/assets/products/classic_white_tee.png" 
+                    alt="Essential Edit" 
                     fill 
-                    sizes="100px"
-                    className="object-contain" 
+                    sizes="(max-width: 768px) 50vw, 15vw"
+                    className="object-contain group-hover:scale-110 transition-transform duration-500" 
                   />
+                </div>
+                <div className="text-center">
+                  <span className="text-[10px] font-bold text-black uppercase tracking-wider block">Premium Basics</span>
+                  <span className="text-[9px] text-black/60 uppercase font-bold tracking-widest">Shop The Edit &gt;</span>
                 </div>
               </Link>
               
-              {/* Clearance Store */}
-              <Link href="/shop" className="relative h-40 bg-[#FFF3E0] border border-black/10 rounded-2xl overflow-hidden group shadow-sm">
-                <Image 
-                  src="/assets/products/product_shortset.png" 
-                  alt="Clearance" 
-                  fill 
-                  sizes="(max-width: 768px) 50vw, 15vw"
-                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500 opacity-80" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent" />
-                <span className="absolute bottom-3 left-0 w-full text-center text-black text-[10px] font-bold uppercase tracking-widest z-10">Clearance</span>
+              {/* Curated Item 2: The Statement */}
+              <Link href="/shop?gender=Boy&category=Jean Sets" className="group relative h-44 bg-[#F5F5F5] border border-black/10 rounded-2xl overflow-hidden shadow-sm p-4 flex flex-col justify-between">
+                <div className="absolute top-3 right-3 z-10">
+                  <span className="px-2 py-0.5 bg-black text-white text-[8px] font-bold uppercase tracking-widest rounded-full">Limited</span>
+                </div>
+                <div className="relative w-full h-24 mt-2">
+                  <Image 
+                    src="/assets/products/denim_jacket.png" 
+                    alt="Statement Edit" 
+                    fill 
+                    sizes="(max-width: 768px) 50vw, 15vw"
+                    className="object-contain group-hover:scale-110 transition-transform duration-500" 
+                  />
+                </div>
+                <div className="text-center">
+                  <span className="text-[10px] font-bold text-black uppercase tracking-wider block">Statement Denim</span>
+                  <span className="text-[9px] text-black/60 uppercase font-bold tracking-widest">Explore Now &gt;</span>
+                </div>
               </Link>
             </div>
           </div>
@@ -82,14 +88,14 @@ export function HeroBento() {
           <h2 className="text-center font-display text-transparent select-none text-sm tracking-widest uppercase hidden md:block">.</h2>
           <div className="grid grid-cols-2 gap-4 h-[650px]">
             {[
-              { title: "Essential Basics", offer: "STARTS ₹199 >", img: "/assets/products/product_tee.png", bg: "bg-[#E9F9FF]" },
-              { title: "Boutique Knits", offer: "NEW SEASON >", img: "/assets/products/wool_sweater.png", bg: "bg-[#FFF6E9]" },
-              { title: "Signature Sets", offer: "UP TO 50% OFF >", img: "/assets/products/product_skirtset.png", bg: "bg-[#FBE9FF]" },
-              { title: "Daily Denim", offer: "BEST SELLERS >", img: "/assets/products/denim_jacket.png", bg: "bg-[#E9FFEB]" },
-              { title: "Warm Layers", offer: "WINTER WEAR >", img: "/assets/products/puffer_jacket.png", bg: "bg-[#F4F6F6]" },
-              { title: "Footwear", offer: "STARTS ₹299 >", img: "/assets/products/product_footwear.png", bg: "bg-[#FDEDEC]" }
+              { title: "Essential Basics", offer: "STARTS ₹199 &gt;", img: "/assets/products/product_tee.png", bg: "bg-[#E9F9FF]", params: "category=Tees & Polos" },
+              { title: "Boutique Knits", offer: "NEW SEASON &gt;", img: "/assets/products/wool_sweater.png", bg: "bg-[#FFF6E9]", params: "category=Outerwear" },
+              { title: "Signature Sets", offer: "UP TO 50% OFF &gt;", img: "/assets/products/product_skirtset.png", bg: "bg-[#FBE9FF]", params: "category=Sets" },
+              { title: "Daily Denim", offer: "BEST SELLERS &gt;", img: "/assets/products/denim_jacket.png", bg: "bg-[#E9FFEB]", params: "category=Jean Sets" },
+              { title: "Warm Layers", offer: "WINTER WEAR &gt;", img: "/assets/products/puffer_jacket.png", bg: "bg-[#F4F6F6]", params: "category=Outerwear" },
+              { title: "Footwear", offer: "STARTS ₹299 &gt;", img: "/assets/products/product_footwear.png", bg: "bg-[#FDEDEC]", params: "category=Footwear" }
             ].map((item, i) => (
-              <Link href="/shop" key={i} className={`group relative ${item.bg} border border-black/10 rounded-2xl overflow-hidden shadow-sm flex flex-col items-center justify-between p-4`}>
+              <Link href={`/shop?${item.params}`} key={i} className={`group relative ${item.bg} border border-black/10 rounded-2xl overflow-hidden shadow-sm flex flex-col items-center justify-between p-4`}>
                 <div className="relative w-full h-28 mt-2">
                   <Image 
                     src={item.img} 
@@ -111,21 +117,27 @@ export function HeroBento() {
         {/* COLUMN 3: Discovery Hub (~40%) */}
         <div className="md:col-span-5 flex flex-col gap-8">
           
-          {/* Row 1: What Are You Looking For? */}
+          {/* Row 1: Shop By Age (Implicit Groups) */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-center font-display text-black text-sm tracking-widest uppercase">What Are You Looking For?</h2>
-            <div className="flex justify-center gap-6 md:gap-10">
+            <h2 className="text-center font-display text-black text-sm tracking-widest uppercase">Shop By Age</h2>
+            <div className="flex justify-center gap-4 md:gap-8">
               {[
-                { name: "NEW IN!", img: "/assets/products/product_sundress.png" },
-                { name: "Birthday", img: "/assets/products/product_skirtset.png" },
-                { name: "Outerwear", img: "/assets/products/puffer_jacket.png" },
-                { name: "Playtime", img: "/assets/products/joggers.png" }
+                { name: "Newborn", params: "ageGroup=0-1", img: "/assets/products/product_shortset.png" },
+                { name: "Toddler", params: "ageGroup=1-2", img: "/assets/products/product_sundress.png" },
+                { name: "Explorer", params: "ageGroup=3-4", img: "/assets/products/joggers.png" },
+                { name: "Big Kid", params: "ageGroup=5-7", img: "/assets/products/denim_jacket.png" }
               ].map((pill, i) => (
-                <Link href="/shop" key={i} className="flex flex-col items-center gap-2 group">
-                  <div className="w-16 h-16 rounded-full border-2 border-black/20 group-hover:border-black overflow-hidden transition-all duration-300 shadow-sm bg-white">
-                     <Image src={pill.img} alt={pill.name} width={64} height={64} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <Link href={`/shop?${pill.params}`} key={i} className="flex flex-col items-center gap-2 group flex-1 max-w-[80px]">
+                  <div className="aspect-square w-full rounded-2xl border border-black/10 group-hover:border-black overflow-hidden transition-all duration-300 shadow-sm bg-white p-2 relative">
+                     <Image 
+                      src={pill.img} 
+                      alt={pill.name} 
+                      fill
+                      sizes="80px"
+                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" 
+                    />
                   </div>
-                  <span className="text-[10px] font-bold text-black uppercase tracking-wider text-center">{pill.name}</span>
+                  <span className="text-[9px] font-bold text-black uppercase tracking-wider text-center">{pill.name}</span>
                 </Link>
               ))}
             </div>
@@ -138,12 +150,12 @@ export function HeroBento() {
               <h2 className="text-center font-display text-black text-base">Essential<br/><span className="text-black text-xs">Girl's Wardrobe</span></h2>
               <div className="grid grid-cols-2 gap-y-6 gap-x-2">
                 {[
-                  { name: "Dresses", img: "/assets/products/product_sundress.png" },
-                  { name: "Skirt Sets", img: "/assets/products/product_skirtset.png" },
-                  { name: "Outerwear", img: "/assets/products/puffer_jacket.png" },
-                  { name: "Footwear", img: "/assets/products/product_footwear.png" }
+                  { name: "Dresses", params: "gender=Girl&category=Dresses", img: "/assets/products/product_sundress.png" },
+                  { name: "Skirt Sets", params: "gender=Girl&category=Sets", img: "/assets/products/product_skirtset.png" },
+                  { name: "Outerwear", params: "gender=Girl&category=Outerwear", img: "/assets/products/puffer_jacket.png" },
+                  { name: "Footwear", params: "gender=Girl&category=Footwear", img: "/assets/products/product_footwear.png" }
                 ].map((cat, i) => (
-                  <Link href="/shop" key={i} className="flex flex-col items-center gap-2 group">
+                  <Link href={`/shop?${cat.params}`} key={i} className="flex flex-col items-center gap-2 group">
                     <div className="w-12 h-12 bg-[#FBE9FF] rounded-xl shadow-sm border border-black/5 flex items-center justify-center group-hover:border-black group-hover:-translate-y-1 transition-all relative overflow-hidden">
                       <Image 
                         src={cat.img} 
@@ -164,12 +176,12 @@ export function HeroBento() {
               <h2 className="text-center font-display text-black text-base">Essential<br/><span className="text-black text-xs">Boy's Wardrobe</span></h2>
               <div className="grid grid-cols-2 gap-y-6 gap-x-2">
                 {[
-                  { name: "Denim", img: "/assets/products/denim_jacket.png" },
-                  { name: "Tees", img: "/assets/products/product_tee.png" },
-                  { name: "Knits", img: "/assets/products/wool_sweater.png" },
-                  { name: "Footwear", img: "/assets/products/product_footwear.png" }
+                  { name: "Denim", params: "gender=Boy&category=Jean Sets", img: "/assets/products/denim_jacket.png" },
+                  { name: "Tees", params: "gender=Boy&category=Tees & Polos", img: "/assets/products/product_tee.png" },
+                  { name: "Knits", params: "gender=Boy&category=Outerwear", img: "/assets/products/wool_sweater.png" },
+                  { name: "Footwear", params: "gender=Boy&category=Footwear", img: "/assets/products/product_footwear.png" }
                 ].map((cat, i) => (
-                  <Link href="/shop" key={i} className="flex flex-col items-center gap-2 group">
+                  <Link href={`/shop?${cat.params}`} key={i} className="flex flex-col items-center gap-2 group">
                     <div className="w-12 h-12 bg-[#E9F9FF] rounded-xl shadow-sm border border-black/5 flex items-center justify-center group-hover:border-black group-hover:-translate-y-1 transition-all relative overflow-hidden">
                       <Image 
                         src={cat.img} 
@@ -209,10 +221,10 @@ export function HeroBento() {
             <h2 className="text-center font-display text-black text-sm tracking-widest uppercase">Shop By Occasion</h2>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { title: "Party Glam", img: "/assets/products/product_sundress.png" },
-                { title: "Weekend Ready", img: "/assets/products/product_shortset.png" }
+                { title: "Party Glam", params: "category=Formal Sets", img: "/assets/products/product_sundress.png" },
+                { title: "Weekend Ready", params: "category=Sets", img: "/assets/products/product_shortset.png" }
               ].map((occ, i) => (
-                <Link href="/shop" key={i} className="relative h-32 border border-black/10 rounded-2xl overflow-hidden group shadow-sm bg-white">
+                <Link href={`/shop?${occ.params}`} key={i} className="relative h-32 border border-black/10 rounded-2xl overflow-hidden group shadow-sm bg-white">
                   <Image 
                     src={occ.img} 
                     alt={occ.title} 
