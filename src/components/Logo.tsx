@@ -20,6 +20,7 @@ export function Logo({
         alt="Zuzuminis Logo" 
         fill
         priority
+        sizes="(max-width: 768px) 150px, 200px"
         className="object-contain"
       />
     </div>

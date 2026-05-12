@@ -51,7 +51,7 @@ export function ShopLayout() {
       <div className="space-y-4">
         <h3 className="font-display text-lg">Category</h3>
         <div className="flex flex-col gap-3 text-sm font-medium text-gray-600">
-          {["All", "Casuals", "Nightwear", "Essentials", "Party"].map(cat => (
+          {["All", "Tees & Polos", "Dresses", "Sets", "Short Sets", "Jean Sets", "Sleepwear", "Formal Sets", "Cute Onesies"].map(cat => (
             <label key={cat} className="flex items-center gap-3 cursor-pointer group">
               <input 
                 type="radio" 

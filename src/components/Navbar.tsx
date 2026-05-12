@@ -44,9 +44,29 @@ export function Navbar() {
         </div>
 
         <div className="bg-butter py-4 px-8 flex justify-between items-center shadow-sm">
-          <Link href="/" className="flex items-center">
-            <Logo className="w-48 h-12" variant="horizontal" />
-          </Link>
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center">
+              <Logo className="w-48 h-12" variant="horizontal" />
+            </Link>
+
+            {/* Global Category Selectors */}
+            <div className="hidden md:flex items-center gap-4 border-l border-black/10 pl-8">
+              {[
+                { name: "Baby", img: "/assets/products/product_shortset.png" },
+                { name: "Girl", img: "/assets/products/product_sundress.png" },
+                { name: "Boy", img: "/assets/products/product_pantset.png" }
+              ].map((cat) => (
+                <Link href={`/shop?category=${cat.name.toLowerCase()}`} key={cat.name} className="flex items-center gap-2 group">
+                  <div className="w-8 h-8 rounded-full overflow-hidden border border-black/10 group-hover:border-zuzu-blue transition-colors">
+                    <img src={cat.img} alt={cat.name} className="w-full h-full object-cover" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-700 group-hover:text-zuzu-blue transition-colors">
+                    {cat.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
 
           <div className="hidden md:flex gap-10 text-[11px] font-bold uppercase tracking-widest text-gray-900">
             <Link href="/" className="hover:text-zuzu-blue transition-colors">Home</Link>
