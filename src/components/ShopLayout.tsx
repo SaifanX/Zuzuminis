@@ -120,14 +120,7 @@ export function ShopLayout() {
   );
 
   return (
-    <div className="relative overflow-hidden">
-      {/* Background Blobs for Color */}
-      <div className="absolute top-0 left-0 w-full h-[600px] pointer-events-none opacity-30 z-0">
-        <div className="absolute -top-40 -left-20 w-[600px] h-[600px] bg-zuzu-blue rounded-full blur-[150px] opacity-40" />
-        <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-zuzu-pink rounded-full blur-[150px] opacity-40" />
-        <div className="absolute top-80 left-1/2 w-[400px] h-[400px] bg-zuzu-yellow rounded-full blur-[120px] opacity-30" />
-      </div>
-
+    <div className="relative min-h-screen overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-24 relative z-10">
         {/* Mobile Top Bar */}
         <div className="md:hidden flex justify-between items-center mb-8 sticky top-[72px] bg-butter/80 backdrop-blur-md z-40 py-4 -mx-6 px-6 border-b border-gray-100">

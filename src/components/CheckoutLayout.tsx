@@ -5,12 +5,12 @@ import { useCart } from "@/context/CartContext";
 import { useUser } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { 
-  CreditCard, 
-  MapPin, 
-  Truck, 
-  ChevronRight, 
-  CheckCircle2, 
+import {
+  CreditCard,
+  MapPin,
+  Truck,
+  ChevronRight,
+  CheckCircle2,
   ShoppingBag,
   ArrowLeft,
   ShieldCheck,
@@ -24,7 +24,7 @@ export function CheckoutLayout() {
   const { cart, totalPrice, clearCart } = useCart();
   const { user } = useUser();
   const placeOrder = useMutation(api.orders.placeOrder);
-  
+
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
@@ -87,8 +87,8 @@ export function CheckoutLayout() {
           Thank you for shopping at Zuzu Minis. <br />
           Your order <span className="font-bold text-gray-900">#{orderId.slice(-6).toUpperCase()}</span> is being prepared with love.
         </p>
-        <Link 
-          href="/shop" 
+        <Link
+          href="/shop"
           className="inline-flex items-center gap-3 px-12 py-5 bg-zuzu-pink text-white rounded-full font-bold shadow-xl hover:scale-105 transition-transform"
         >
           Continue Shopping <ChevronRight className="w-5 h-5" />
@@ -121,66 +121,66 @@ export function CheckoutLayout() {
                 <MapPin className="w-8 h-8 text-zuzu-blue" />
                 Shipping Details
               </h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Full Name</label>
-                  <input 
+                  <input
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    type="text" 
+                    type="text"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
                     placeholder="e.g. Anaya Sharma"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Email Address</label>
-                  <input 
+                  <input
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    type="email" 
+                    type="email"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
                     placeholder="hello@example.com"
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Delivery Address</label>
-                  <input 
+                  <input
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    type="text" 
+                    type="text"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
                     placeholder="House No, Street, Landmark"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">City</label>
-                  <input 
+                  <input
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    type="text" 
+                    type="text"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
-                    placeholder="Mumbai"
+                    placeholder="Bangalore"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Phone Number</label>
-                  <input 
+                  <input
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    type="tel" 
+                    type="tel"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
                     placeholder="+91 XXXXX XXXXX"
                   />
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => setStep(2)}
                 disabled={!formData.address || !formData.phone}
                 className="w-full py-5 bg-zuzu-blue text-white rounded-full font-bold text-lg shadow-xl shadow-blue-100 flex items-center justify-center gap-3 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:scale-100"
@@ -193,13 +193,13 @@ export function CheckoutLayout() {
 
           {step === 2 && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <button 
+              <button
                 onClick={() => setStep(1)}
                 className="text-gray-400 flex items-center gap-2 text-sm font-bold hover:text-zuzu-blue transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" /> Back to Shipping
               </button>
-              
+
               <h2 className="text-3xl font-display flex items-center gap-4">
                 <CreditCard className="w-8 h-8 text-zuzu-blue" />
                 Payment Method
@@ -218,9 +218,9 @@ export function CheckoutLayout() {
                   </div>
                   <CheckCircle2 className="w-6 h-6 text-zuzu-blue" />
                 </div>
-                
+
                 <div className="p-6 bg-gray-50 border-2 border-transparent rounded-[2rem] flex items-center justify-between opacity-60">
-                   <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-400">
                       <CreditCard className="w-6 h-6" />
                     </div>
@@ -240,7 +240,7 @@ export function CheckoutLayout() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={handlePlaceOrder}
                 disabled={isSubmitting}
                 className="w-full py-5 bg-zuzu-pink text-white rounded-full font-bold text-lg shadow-xl shadow-pink-100 flex items-center justify-center gap-3 hover:scale-[1.02] transition-all disabled:opacity-50"

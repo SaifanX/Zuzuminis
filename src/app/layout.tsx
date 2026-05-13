@@ -50,6 +50,12 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
+import { MagicRipple } from "@/components/MagicRipple";
+import { BoutiqueBackground } from "@/components/BoutiqueBackground";
+import { PostHogProvider } from "@/context/PostHogProvider";
+import PostHogPageView from "@/components/PostHogPageView";
+import { Suspense } from "react";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -58,15 +64,26 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${searghy.variable} ${kiddos.variable} ${outfit.variable} antialiased`}>
-        <ConvexClientProvider>
+        <PostHogProvider>
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
+          <ConvexClientProvider>
           <CartProvider>
             <UserSync />
             <ChildOnboarding />
             <CursorGlitter />
             <CartDrawer />
-            {children}
+            <MagicRipple />
+            <div className="relative min-h-screen bg-butter overflow-hidden">
+              <BoutiqueBackground />
+              <div className="relative z-10">
+                {children}
+              </div>
+            </div>
           </CartProvider>
         </ConvexClientProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

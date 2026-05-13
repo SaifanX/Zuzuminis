@@ -1,5 +1,5 @@
 ---
-trigger: manual
+trigger: glob
 ---
 
 # Skill: Architect and Builder Split

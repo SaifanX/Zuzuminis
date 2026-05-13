@@ -41,7 +41,7 @@ export default function ProductPage() {
   }
 
   return (
-    <main ref={container} className="min-h-screen bg-butter selection:bg-zuzu-blue selection:text-white">
+    <main ref={container} className="relative min-h-screen selection:bg-zuzu-blue selection:text-white overflow-hidden">
       <Navbar />
       
       {/* Spacer */}
