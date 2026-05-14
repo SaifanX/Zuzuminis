@@ -10,7 +10,7 @@ dotenv.config({ path: ".env.local" });
 const client = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 async function importProducts() {
-  const csvFilePath = path.join(process.cwd(), "products", "Zuzu Minis _Stock Summary (1).csv");
+  const csvFilePath = path.join(__dirname, "../products/Zuzu Minis _Stock Summary (1).csv");
   const fileContent = fs.readFileSync(csvFilePath, "utf-8");
 
   const records = parse(fileContent, {

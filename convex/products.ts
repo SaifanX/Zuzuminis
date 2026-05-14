@@ -55,6 +55,14 @@ export const list = query({
   },
 });
 
+export const count = query({
+  args: {},
+  handler: async (ctx) => {
+    const products = await ctx.db.query("products").collect();
+    return products.length;
+  },
+});
+
 export const getBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
@@ -178,5 +186,21 @@ export const upsertProduct = mutation({
     } else {
       return await ctx.db.insert("products", productData);
     }
+  },
+});
+
+export const updateImage = mutation({
+  args: {
+    id: v.id("products"),
+    imageUrl: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const product = await ctx.db.get(args.id);
+    if (!product) throw new Error("Product not found");
+
+    // Replace placeholders or add to array
+    await ctx.db.patch(args.id, {
+      images: [args.imageUrl], // For now we just replace with one primary image
+    });
   },
 });
