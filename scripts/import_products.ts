@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { parse } from "csv-parse/sync";
 import * as dotenv from "dotenv";
+import { api } from "../convex/_generated/api";
 
 dotenv.config({ path: ".env.local" });
 
@@ -15,7 +16,7 @@ async function importProducts() {
   const records = parse(fileContent, {
     columns: true,
     skip_empty_lines: true,
-  });
+  }) as any[];
 
   console.log(`Found ${records.length} products in CSV.`);
 
@@ -85,8 +86,7 @@ async function importProducts() {
 
     try {
       // Calling a Convex mutation to upsert the product
-      // We'll create this mutation in the next step
-      await client.mutation("products:upsertProduct", { product });
+      await client.mutation(api.products.upsertProduct, { product });
       console.log(`Imported: ${name}`);
     } catch (error) {
       console.error(`Failed to import ${name}:`, error);
