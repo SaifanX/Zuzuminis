@@ -6,17 +6,21 @@ export default defineSchema({
     name: v.string(),
     description: v.string(),
     price: v.number(),
+    costPrice: v.optional(v.number()),
     category: v.string(),
     inventory: v.number(),
     images: v.array(v.string()),
     slug: v.string(),
+    sku: v.optional(v.string()), // The 'Code' column from CSV
     isFeatured: v.boolean(),
     details: v.optional(v.string()),
-    ageGroup: v.optional(v.string()), // e.g., "0-1", "1-2"
+    ageGroup: v.optional(v.string()), // e.g., "Newborn", "Toddler"
     gender: v.optional(v.string()),   // e.g., "Boy", "Girl", "Unisex"
+    sizes: v.optional(v.array(v.string())), // e.g., ["0-3M", "3-6M"]
     position: v.optional(v.array(v.number())), // [x, y, z]
     rotation: v.optional(v.array(v.number())), // [x, y, z]
-  }).index("by_slug", ["slug"]),
+  }).index("by_slug", ["slug"])
+    .index("by_category", ["category"]),
   
   cartItems: defineTable({
     userId: v.string(),

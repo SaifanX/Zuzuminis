@@ -131,3 +131,52 @@ export const seed = mutation({
     }
   },
 });
+
+export const upsertProduct = mutation({
+  args: {
+    product: v.object({
+      name: v.string(),
+      description: v.string(),
+      price: v.number(),
+      costPrice: v.optional(v.number()),
+      category: v.string(),
+      inventory: v.number(),
+      images: v.array(v.string()),
+      slug: v.string(),
+      sku: v.optional(v.string()),
+      isFeatured: v.boolean(),
+      details: v.optional(v.string()),
+      ageGroup: v.optional(v.string()),
+      gender: v.optional(v.string()),
+      sizes: v.optional(v.array(v.string())),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query("products")
+      .withIndex("by_slug", (q) => q.eq("slug", args.product.slug))
+      .unique();
+
+    // Assign a placeholder image if none provided
+    const productData = { ...args.product };
+    if (productData.images.length === 0) {
+      const cat = productData.category.toLowerCase();
+      let placeholder = "product_tee.png";
+      if (cat.includes("bootie") || cat.includes("shoe")) placeholder = "product_footwear.png";
+      else if (cat.includes("frock") || cat.includes("dress")) placeholder = "product_sundress.png";
+      else if (cat.includes("suit")) placeholder = "product_pantset.png";
+      else if (cat.includes("set")) placeholder = "product_shortset.png";
+      else if (cat.includes("skirt")) placeholder = "product_skirtset.png";
+      else if (cat.includes("pillow") || cat.includes("mat")) placeholder = "product_shortset.png";
+      
+      productData.images = [getImg(placeholder)];
+    }
+
+    if (existing) {
+      await ctx.db.patch(existing._id, productData);
+      return existing._id;
+    } else {
+      return await ctx.db.insert("products", productData);
+    }
+  },
+});
