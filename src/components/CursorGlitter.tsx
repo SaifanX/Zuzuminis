@@ -1,9 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 export function CursorGlitter() {
+  const pathname = usePathname();
   const overlayRef = useRef<HTMLDivElement>(null);
+
+  // Disable glitter on admin pages for a cleaner workspace
+  const isAdmin = pathname?.startsWith("/admin");
+
+  if (isAdmin) return null;
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

@@ -200,7 +200,47 @@ export const updateImage = mutation({
 
     // Replace placeholders or add to array
     await ctx.db.patch(args.id, {
-      images: [args.imageUrl], // For now we just replace with one primary image
+      images: [args.imageUrl],
     });
+  },
+});
+
+export const update = mutation({
+  args: {
+    id: v.id("products"),
+    updates: v.object({
+      name: v.optional(v.string()),
+      price: v.optional(v.number()),
+      category: v.optional(v.string()),
+      description: v.optional(v.string()),
+      inventory: v.optional(v.number()),
+      isFeatured: v.optional(v.boolean()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, args.updates);
+  },
+});
+
+export const remove = mutation({
+  args: { id: v.id("products") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
+  },
+});
+
+export const purgeOldProducts = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const products = await ctx.db.query("products").collect();
+    let count = 0;
+    for (const p of products) {
+      // The old products used a very specific "modern little one" description
+      if (p.description.includes("modern little one")) {
+        await ctx.db.delete(p._id);
+        count++;
+      }
+    }
+    return count;
   },
 });
