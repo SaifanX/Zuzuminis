@@ -31,7 +31,6 @@ const kiddos = localFont({
   variable: "--font-kiddos",
 });
 
-import { CursorGlitter } from "@/components/CursorGlitter";
 import { CartProvider } from "@/context/CartContext";
 import { CartDrawer } from "@/components/CartDrawer";
 import { UserSync } from "@/components/UserSync";
@@ -62,8 +61,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${searghy.variable} ${kiddos.variable} ${outfit.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${searghy.variable} ${kiddos.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
         <PostHogProvider>
           <Suspense fallback={null}>
             <PostHogPageView />
@@ -72,7 +71,6 @@ export default function RootLayout({
           <CartProvider>
             <UserSync />
             <ChildOnboarding />
-            <CursorGlitter />
             <CartDrawer />
             <MagicRipple />
             <div className="relative min-h-screen bg-butter overflow-hidden">

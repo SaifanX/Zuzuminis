@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { X, Trash2, Edit3, Check, Loader2, Filter, LayoutGrid, List } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+
 
 export default function AdminImagesPage() {
   const products = useQuery(api.products.list, {});
@@ -72,7 +74,15 @@ export default function AdminImagesPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.4em] text-white/30 mb-2 font-bold">Boutique Control</p>
+              <div className="flex items-center gap-4 mb-2">
+                <p className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">Boutique Control</p>
+                <Link 
+                  href="/admin"
+                  className="text-[10px] uppercase tracking-[0.2em] text-zuzu-pink font-bold hover:underline"
+                >
+                  ← Back to Dashboard
+                </Link>
+              </div>
               <h1 className="text-3xl md:text-6xl font-extralight tracking-tighter italic">
                 Media <span className="font-normal not-italic">Vault</span>
               </h1>

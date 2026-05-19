@@ -397,10 +397,10 @@ export function HeroBento() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                     onClick={(e) => handleRevealClick(e, `ageGroup=${activeAge}`, ageCategories[activeAge].color)}
-                    className="bg-black rounded-2xl p-4 flex flex-col items-center justify-center gap-1 group"
+                    className="bg-white border border-black/10 rounded-2xl p-4 flex flex-col items-center justify-center gap-1 group hover:border-zuzu-blue hover:shadow-md transition-all cursor-pointer shadow-sm"
                   >
-                    <span className="text-white font-display text-lg">Shop All</span>
-                    <ArrowRight className="text-white w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span className="text-gray-900 font-display text-lg group-hover:text-zuzu-blue transition-colors">Shop All</span>
+                    <ArrowRight className="text-gray-900 w-4 h-4 group-hover:translate-x-1 group-hover:text-zuzu-blue transition-all" />
                   </motion.button>
                 </motion.div>
               ) : (
@@ -449,10 +449,10 @@ export function HeroBento() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                     onClick={(e) => handleRevealClick(e, categoryContent[activeCategory!].params, activeCategory === "signature" ? "#FFD1DC" : "#BDE0FE")}
-                    className="bg-black rounded-2xl p-4 flex flex-col items-center justify-center gap-1 group"
+                    className="bg-white border border-black/10 rounded-2xl p-4 flex flex-col items-center justify-center gap-1 group hover:border-zuzu-blue hover:shadow-md transition-all cursor-pointer shadow-sm"
                   >
-                    <span className="text-white font-display text-lg">View All</span>
-                    <ArrowRight className="text-white w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span className="text-gray-900 font-display text-lg group-hover:text-zuzu-blue transition-colors">View All</span>
+                    <ArrowRight className="text-gray-900 w-4 h-4 group-hover:translate-x-1 group-hover:text-zuzu-blue transition-all" />
                   </motion.button>
                 </motion.div>
               )}

@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 import { useCart } from "@/context/CartContext";
 import { useUser } from "@clerk/nextjs";
-import { useMutation } from "convex/react";
+import { useMutation, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import {
   CreditCard,
@@ -19,15 +19,44 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
+import { usePostHog } from "posthog-js/react";
+
+// Helper to dynamically load the Razorpay script
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if ((window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 export function CheckoutLayout() {
   const { cart, totalPrice, clearCart } = useCart();
   const { user } = useUser();
   const placeOrder = useMutation(api.orders.placeOrder);
+  const sendWhatsAppNotification = useAction(api.whatsapp.sendWhatsAppNotification);
+  const posthog = usePostHog();
 
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
+
+  // Track checkout started on mount
+  React.useEffect(() => {
+    if (cart.length > 0) {
+      posthog?.capture("checkout_started", {
+        cartValue: totalPrice,
+        totalItems: cart.length,
+      });
+    }
+  }, [cart.length, totalPrice, posthog]);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -43,6 +72,15 @@ export function CheckoutLayout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleStepChange = (newStep: number) => {
+    setStep(newStep);
+    posthog?.capture("checkout_step_completed", {
+      completedStep: step,
+      nextStep: newStep,
+      cartValue: totalPrice,
+    });
+  };
+
   const handlePlaceOrder = async () => {
     if (!user) return;
     setIsSubmitting(true);
@@ -54,24 +92,118 @@ export function CheckoutLayout() {
         price: item.price,
       }));
 
-      const res = await placeOrder({
-        userId: user.id,
-        items,
-        total: totalPrice,
-        customerInfo: {
-          name: formData.name,
-          email: formData.email,
-          address: `${formData.address}, ${formData.city}, ${formData.zip}`,
-          phone: formData.phone,
-        },
-      });
+      const fullAddress = `${formData.address}, ${formData.city}, ${formData.zip}`;
 
-      setOrderId(res);
-      setStep(3); // Success step
-      clearCart();
-    } catch (error) {
-      console.error("Failed to place order:", error);
-    } finally {
+      if (paymentMethod === "COD") {
+        // Place COD order directly
+        const res = await placeOrder({
+          userId: user.id,
+          items,
+          total: totalPrice,
+          paymentMethod: "COD",
+          customerInfo: {
+            name: formData.name,
+            email: formData.email,
+            address: fullAddress,
+            phone: formData.phone,
+          },
+        });
+
+        // Trigger WhatsApp order confirmation directly from browser
+        try {
+          await sendWhatsAppNotification({ orderId: res });
+        } catch (waError) {
+          console.error("[Checkout] Failed to trigger WhatsApp confirmation for COD:", waError);
+        }
+
+        setOrderId(res);
+        setStep(3); // Success step
+        clearCart();
+
+        posthog?.capture("order_placed_success", {
+          orderId: res,
+          totalAmount: totalPrice,
+          totalItems: items.length,
+          paymentMethod: "COD",
+        });
+      } else {
+        // ONLINE PAYMENT
+        const isScriptLoaded = await loadRazorpayScript();
+        if (!isScriptLoaded) {
+          alert("Could not load Razorpay checkout script. Please check your network connection.");
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Initialize order on backend
+        const response = await fetch("/api/payments/create-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            items,
+            total: totalPrice,
+            customerInfo: {
+              name: formData.name,
+              email: formData.email,
+              address: fullAddress,
+              phone: formData.phone,
+            },
+          }),
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Failed to initialize payment transaction.");
+        }
+
+        const { razorpayOrderId, amount, currency, orderId: dbOrderId } = data;
+
+        // Open Razorpay Popup Modal
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          amount: amount,
+          currency: currency,
+          name: "Zuzu Minis",
+          description: "Premium kids apparel",
+          order_id: razorpayOrderId,
+          prefill: {
+            name: formData.name,
+            email: formData.email,
+            contact: formData.phone,
+          },
+          theme: {
+            color: "#f87171", // Zuzu Pink
+          },
+          handler: function (rzpResponse: any) {
+            // Payment success callback from Razorpay
+            setOrderId(dbOrderId);
+            setStep(3);
+            clearCart();
+
+            posthog?.capture("order_placed_success", {
+              orderId: dbOrderId,
+              totalAmount: totalPrice,
+              totalItems: items.length,
+              paymentMethod: "ONLINE",
+              razorpayPaymentId: rzpResponse.razorpay_payment_id,
+            });
+          },
+          modal: {
+            ondismiss: function () {
+              setIsSubmitting(false);
+            },
+          },
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      }
+    } catch (error: any) {
+      console.error("[Checkout Error] Order placement failed:", error);
+      alert(error.message || "Failed to process order. Please try again.");
       setIsSubmitting(false);
     }
   };
@@ -124,51 +256,62 @@ export function CheckoutLayout() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Full Name</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Full Name</label>
                   <input
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     type="text"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
-                    placeholder="e.g. Anaya Sharma"
+                    placeholder="Enter your name"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Email Address</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
                   <input
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     type="email"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
-                    placeholder="hello@example.com"
+                    placeholder="name@example.com"
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Delivery Address</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Street Address</label>
                   <input
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
                     type="text"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
-                    placeholder="House No, Street, Landmark"
+                    placeholder="Flat / House No. / Area"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">City</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">City</label>
                   <input
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
                     type="text"
                     className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
-                    placeholder="Bangalore"
+                    placeholder="City name"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Phone Number</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">ZIP / Postal Code</label>
+                  <input
+                    name="zip"
+                    value={formData.zip}
+                    onChange={handleInputChange}
+                    type="text"
+                    className="w-full bg-white border-2 border-transparent focus:border-zuzu-blue/10 rounded-2xl p-4 outline-none transition-all font-medium"
+                    placeholder="600001"
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Phone Number (for updates)</label>
                   <input
                     name="phone"
                     value={formData.phone}
@@ -181,7 +324,7 @@ export function CheckoutLayout() {
               </div>
 
               <button
-                onClick={() => setStep(2)}
+                onClick={() => handleStepChange(2)}
                 disabled={!formData.address || !formData.phone}
                 className="w-full py-5 bg-zuzu-blue text-white rounded-full font-bold text-lg shadow-xl shadow-blue-100 flex items-center justify-center gap-3 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:scale-100"
               >
@@ -194,7 +337,7 @@ export function CheckoutLayout() {
           {step === 2 && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <button
-                onClick={() => setStep(1)}
+                onClick={() => handleStepChange(1)}
                 className="text-gray-400 flex items-center gap-2 text-sm font-bold hover:text-zuzu-blue transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" /> Back to Shipping
@@ -206,37 +349,54 @@ export function CheckoutLayout() {
               </h2>
 
               <div className="grid grid-cols-1 gap-4">
-                <div className="p-6 bg-white border-2 border-zuzu-blue rounded-[2rem] flex items-center justify-between shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("COD")}
+                  className={`p-6 text-left rounded-[2rem] border-2 transition-all flex items-center justify-between ${
+                    paymentMethod === "COD"
+                      ? "bg-white border-zuzu-blue shadow-sm"
+                      : "bg-gray-50/50 border-transparent hover:bg-gray-50"
+                  }`}
+                >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-zuzu-blue/10 rounded-full flex items-center justify-center">
                       <Truck className="w-6 h-6 text-zuzu-blue" />
                     </div>
                     <div>
-                      <p className="font-bold text-gray-900">Cash on Delivery</p>
+                      <p className="font-bold text-gray-900">Cash on Delivery (COD)</p>
                       <p className="text-xs text-gray-400 font-medium">Pay when your minis arrive</p>
                     </div>
                   </div>
-                  <CheckCircle2 className="w-6 h-6 text-zuzu-blue" />
-                </div>
+                  {paymentMethod === "COD" && <CheckCircle2 className="w-6 h-6 text-zuzu-blue" />}
+                </button>
 
-                <div className="p-6 bg-gray-50 border-2 border-transparent rounded-[2rem] flex items-center justify-between opacity-60">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("ONLINE")}
+                  className={`p-6 text-left rounded-[2rem] border-2 transition-all flex items-center justify-between ${
+                    paymentMethod === "ONLINE"
+                      ? "bg-white border-zuzu-blue shadow-sm"
+                      : "bg-gray-50/50 border-transparent hover:bg-gray-50"
+                  }`}
+                >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-400">
-                      <CreditCard className="w-6 h-6" />
+                    <div className="w-12 h-12 bg-zuzu-pink/10 rounded-full flex items-center justify-center">
+                      <CreditCard className="w-6 h-6 text-zuzu-pink" />
                     </div>
                     <div>
-                      <p className="font-bold text-gray-400">UPI / Card</p>
-                      <p className="text-xs text-gray-400 font-medium">Currently disabled for maintenance</p>
+                      <p className="font-bold text-gray-900">UPI / Card / Netbanking</p>
+                      <p className="text-xs text-gray-400 font-medium">Fast & secure instant online payment via Razorpay</p>
                     </div>
                   </div>
-                </div>
+                  {paymentMethod === "ONLINE" && <CheckCircle2 className="w-6 h-6 text-zuzu-blue" />}
+                </button>
               </div>
 
               <div className="p-8 bg-butter border border-black/5 rounded-[2.5rem] flex items-start gap-4">
                 <ShieldCheck className="w-6 h-6 text-zuzu-blue shrink-0 mt-1" />
                 <div>
                   <p className="font-bold text-gray-900 mb-1">Secure Transaction</p>
-                  <p className="text-xs text-gray-500 leading-relaxed font-body">Your safety is our priority. We use industry-standard encryption to protect your data. Payment is currently cash-only for maximum trust.</p>
+                  <p className="text-xs text-gray-500 leading-relaxed font-body">Your safety is our priority. We use industry-standard encryption to protect your data. All transactions are fully verified and monitored.</p>
                 </div>
               </div>
 
@@ -245,7 +405,7 @@ export function CheckoutLayout() {
                 disabled={isSubmitting}
                 className="w-full py-5 bg-zuzu-pink text-white rounded-full font-bold text-lg shadow-xl shadow-pink-100 flex items-center justify-center gap-3 hover:scale-[1.02] transition-all disabled:opacity-50"
               >
-                {isSubmitting ? "Placing Order..." : "Confirm & Place Order"}
+                {isSubmitting ? "Processing..." : paymentMethod === "COD" ? "Confirm & Place Order" : "Proceed to Pay"}
                 {!isSubmitting && <ShoppingBag className="w-5 h-5" />}
               </button>
             </div>

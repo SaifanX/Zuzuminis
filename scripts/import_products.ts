@@ -10,6 +10,10 @@ dotenv.config({ path: ".env.local" });
 const client = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 async function importProducts() {
+  console.log("Purging legacy test products...");
+  const purgedCount = await client.mutation(api.products.purgeOldProducts);
+  console.log(`Purged ${purgedCount} old products.`);
+
   const csvFilePath = path.join(__dirname, "../products/Zuzu Minis _Stock Summary (1).csv");
   const fileContent = fs.readFileSync(csvFilePath, "utf-8");
 

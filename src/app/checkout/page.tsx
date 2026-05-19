@@ -6,7 +6,7 @@ import { CheckoutLayout } from "@/components/CheckoutLayout";
 
 export default function CheckoutPage() {
   return (
-    <main className="min-h-screen bg-butter">
+    <main className="min-h-screen bg-transparent">
       <Navbar />
       
       {/* Spacer for fixed navbar */}

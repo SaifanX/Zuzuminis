@@ -1,6 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 export interface CartItem {
   _id: string;
@@ -29,6 +32,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useUser();
+  const syncActiveCart = useMutation(api.marketing.syncActiveCart);
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -42,10 +47,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Save cart to localStorage on change
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  // Save cart to localStorage on change & sync to Convex for Abandoned Cart tracking
   useEffect(() => {
     localStorage.setItem("zuzu-cart", JSON.stringify(cart));
-  }, [cart]);
+    if (user && user.primaryEmailAddress?.emailAddress) {
+      syncActiveCart({
+        userId: user.id,
+        email: user.primaryEmailAddress.emailAddress,
+        cartValue: totalPrice,
+        itemsCount: totalItems,
+      }).catch(err => console.error("Failed to sync cart", err));
+    }
+  }, [cart, user, totalPrice, totalItems, syncActiveCart]);
 
   const addToCart = (item: CartItem) => {
     setCart((prev) => {
@@ -75,9 +91,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const clearCart = () => setCart([]);
-
-  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <CartContext.Provider

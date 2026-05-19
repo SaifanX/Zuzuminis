@@ -5,7 +5,7 @@ import { ShopLayout } from "@/components/ShopLayout";
 
 export default function ShopPage() {
   return (
-    <main className="min-h-screen bg-butter">
+    <main className="min-h-screen bg-transparent">
       <Navbar />
       
       {/* Spacer for fixed navbar */}

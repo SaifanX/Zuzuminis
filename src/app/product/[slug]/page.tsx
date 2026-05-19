@@ -14,7 +14,13 @@ import { useParams, notFound } from "next/navigation";
 export default function ProductPage() {
   const params = useParams();
   const slug = params?.slug as string;
+
+  console.log("[ProductPage] Params:", params);
+  console.log("[ProductPage] Slug:", slug);
+
   const product = useQuery(api.products.getBySlug, slug ? { slug } : "skip");
+
+  console.log("[ProductPage] Product:", product);
 
   const container = useRef<HTMLDivElement>(null);
 
@@ -27,7 +33,7 @@ export default function ProductPage() {
 
   if (product === undefined) {
     return (
-      <div className="min-h-screen bg-butter flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center">
           <div className="w-12 h-12 rounded-full border-4 border-zuzu-blue border-t-transparent animate-spin mb-4" />
           <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">Loading Magic...</p>

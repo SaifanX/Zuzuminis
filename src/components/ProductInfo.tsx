@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Star, Heart, Share2, Ruler, ShoppingCart, X } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
+import { usePostHog } from "posthog-js/react";
 
 interface ProductInfoProps {
   product: {
@@ -12,16 +13,21 @@ interface ProductInfoProps {
     images: string[];
     slug: string;
     details?: string;
+    sizes?: string[];
   };
 }
 
 export function ProductInfo({ product }: ProductInfoProps) {
   const { addToCart } = useCart();
+  const posthog = usePostHog();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("default");
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
-  const sizes = ["0-3M", "3-6M", "6-12M", "1-2Y", "2-3Y", "3-4Y"];
+  const availableSizes = product.sizes && product.sizes.length > 0 
+    ? product.sizes 
+    : ["0-3M", "3-6M", "6-12M", "1-2Y", "2-3Y", "3-4Y"];
+
   const colors = [
     { id: "default", hex: "#FF9D66" }, // zuzu-orange light
     { id: "pink", hex: "#FBCFE8" },
@@ -61,6 +67,28 @@ export function ProductInfo({ product }: ProductInfoProps) {
       quantity: 1,
       size: selectedSize
     });
+
+    posthog?.capture("add_to_cart", {
+      productName: product.name,
+      price: product.price,
+      size: selectedSize,
+      color: selectedColor,
+    });
+  };
+
+  const handleSizeSelect = (size: string) => {
+    setSelectedSize(size);
+    posthog?.capture("size_selected", {
+      productName: product.name,
+      size: size,
+    });
+  };
+
+  const handleSizeGuideOpen = () => {
+    setIsSizeGuideOpen(true);
+    posthog?.capture("size_guide_opened", {
+      productName: product.name,
+    });
   };
 
   return (
@@ -95,15 +123,13 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
       {/* Color Selector */}
       <div className="mb-8">
-        <h3 className="font-bold text-gray-900 mb-4 uppercase tracking-widest text-xs">Select Color</h3>
-        <div className="flex gap-4">
+        <h3 className="font-bold text-gray-900 uppercase tracking-widest text-xs mb-4">Color — <span className="text-zuzu-orange capitalize">{selectedColor}</span></h3>
+        <div className="flex gap-3">
           {colors.map(color => (
             <button
               key={color.id}
               onClick={() => setSelectedColor(color.id)}
-              className={`w-12 h-12 rounded-full border-2 transition-transform hover:scale-110 ${
-                selectedColor === color.id ? "border-gray-900 scale-110 shadow-md" : "border-transparent shadow-sm"
-              }`}
+              className={`w-10 h-10 rounded-full transition-all flex items-center justify-center ${selectedColor === color.id ? "ring-4 ring-black/10 scale-110" : "hover:scale-105"}`}
               style={{ backgroundColor: color.hex }}
             />
           ))}
@@ -117,17 +143,17 @@ export function ProductInfo({ product }: ProductInfoProps) {
             Select Size {selectedSize && <span className="ml-2 text-zuzu-blue">— {selectedSize}</span>}
           </h3>
           <button 
-            onClick={() => setIsSizeGuideOpen(true)}
+            onClick={handleSizeGuideOpen}
             className="text-xs text-gray-400 hover:text-zuzu-blue flex items-center gap-1 font-bold underline transition-colors"
           >
             <Ruler className="w-3 h-3" /> Size Guide
           </button>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-          {sizes.map(size => (
+          {availableSizes.map(size => (
             <button
               key={size}
-              onClick={() => setSelectedSize(size)}
+              onClick={() => handleSizeSelect(size)}
               className={`py-3 rounded-xl font-bold text-sm transition-all ${
                 selectedSize === size 
                   ? "bg-zuzu-blue text-white shadow-lg scale-105" 

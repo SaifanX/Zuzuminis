@@ -32,22 +32,46 @@ export const list = query({
     search: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const products = await ctx.db.query("products").filter((q) => {
-      const conditions = [];
-      if (args.ageGroup && args.ageGroup !== "All") conditions.push(q.eq(q.field("ageGroup"), args.ageGroup));
-      if (args.gender && args.gender !== "All") conditions.push(q.eq(q.field("gender"), args.gender));
-      if (args.category && args.category !== "All") conditions.push(q.eq(q.field("category"), args.category));
-      
-      if (conditions.length === 0) return true;
-      if (conditions.length === 1) return conditions[0];
-      return q.and(...conditions as [any, any, ...any[]]);
-    }).collect();
+    let products = await ctx.db.query("products").collect();
 
+    // Smart Age Group Filter
+    if (args.ageGroup && args.ageGroup !== "All") {
+      products = products.filter(p => p.ageGroup === args.ageGroup);
+    }
+
+    // Smart Gender Filter
+    if (args.gender && args.gender !== "All") {
+      products = products.filter(p => p.gender === args.gender);
+    }
+
+    // Smart Category Grouping Filter
+    if (args.category && args.category !== "All") {
+      const cat = args.category.toLowerCase();
+      products = products.filter(p => {
+        const pCat = p.category.toLowerCase();
+        const pName = p.name.toLowerCase();
+        const text = `${pCat} ${pName}`;
+
+        if (cat === "sets & baba suits") return text.includes("baba") || text.includes("suit") || text.includes("set") || text.includes("combo");
+        if (cat === "dresses & frocks") return text.includes("frock") || text.includes("dress") || text.includes("skirt");
+        if (cat === "nightwear & sleepsuits") return text.includes("night") || text.includes("sleep") || text.includes("pajama");
+        if (cat === "booties & footwear") return text.includes("bootie") || text.includes("shoe") || text.includes("sock") || text.includes("footwear");
+        if (cat === "blankets & towels") return text.includes("blanket") || text.includes("blacket") || text.includes("towel") || text.includes("wraper") || text.includes("wrap");
+        if (cat === "pillows & bedding") return text.includes("pillow") || text.includes("bedding") || text.includes("mat");
+        if (cat === "gift boxes & combos") return text.includes("gift") || text.includes("box") || text.includes("combo") || text.includes("pack");
+        if (cat === "accessories & essentials") return text.includes("cap") || text.includes("mitten") || text.includes("cloth") || text.includes("bag") || text.includes("toy") || text.includes("essential");
+        
+        return pCat.includes(cat) || pName.includes(cat);
+      });
+    }
+
+    // Smart Search Filter
     if (args.search) {
       const s = args.search.toLowerCase();
-      return products.filter((p) => 
+      products = products.filter((p) => 
         p.name.toLowerCase().includes(s) || 
-        p.category.toLowerCase().includes(s)
+        p.category.toLowerCase().includes(s) ||
+        p.description.toLowerCase().includes(s)
       );
     }
 
@@ -165,17 +189,31 @@ export const upsertProduct = mutation({
       .withIndex("by_slug", (q) => q.eq("slug", args.product.slug))
       .unique();
 
-    // Assign a placeholder image if none provided
+    // Assign a premium lifestyle image from Cloudinary based on smart keyword matching
     const productData = { ...args.product };
     if (productData.images.length === 0) {
-      const cat = productData.category.toLowerCase();
+      const text = `${productData.category} ${productData.name}`.toLowerCase();
       let placeholder = "product_tee.png";
-      if (cat.includes("bootie") || cat.includes("shoe")) placeholder = "product_footwear.png";
-      else if (cat.includes("frock") || cat.includes("dress")) placeholder = "product_sundress.png";
-      else if (cat.includes("suit")) placeholder = "product_pantset.png";
-      else if (cat.includes("set")) placeholder = "product_shortset.png";
-      else if (cat.includes("skirt")) placeholder = "product_skirtset.png";
-      else if (cat.includes("pillow") || cat.includes("mat")) placeholder = "product_shortset.png";
+
+      if (text.includes("shoe") || text.includes("bootie") || text.includes("sock") || text.includes("footwear")) {
+        placeholder = text.includes("loafer") || text.includes("leather") ? "leather_loafers.png" : "product_footwear.png";
+      } else if (text.includes("frock") || text.includes("dress")) {
+        placeholder = text.includes("polka") || text.includes("jumpsuit") ? "polka_dot_jumpsuit.png" : "product_sundress.png";
+      } else if (text.includes("skirt")) {
+        placeholder = text.includes("ruffle") ? "ruffle_skirt.png" : "product_skirtset.png";
+      } else if (text.includes("jacket") || text.includes("coat") || text.includes("puffer")) {
+        placeholder = text.includes("denim") ? "denim_jacket.png" : "puffer_jacket.png";
+      } else if (text.includes("sweater") || text.includes("cardigan") || text.includes("knit") || text.includes("beanie")) {
+        placeholder = "wool_sweater.png";
+      } else if (text.includes("jogger") || text.includes("trouser") || text.includes("pant") || text.includes("legging")) {
+        placeholder = text.includes("linen") ? "linen_trousers.png" : (text.includes("jogger") ? "joggers.png" : "product_pantset.png");
+      } else if (text.includes("baba") || text.includes("suit") || text.includes("night") || text.includes("sleepsuit") || text.includes("pajama")) {
+        placeholder = text.includes("half") || text.includes("h/s") || text.includes("short") ? "product_shortset.png" : "product_pantset.png";
+      } else if (text.includes("t shirt") || text.includes("tee") || text.includes("polo") || text.includes("body suit") || text.includes("onesie")) {
+        placeholder = text.includes("dino") ? "dinosaur_tee.png" : (text.includes("polo") ? "striped_polo.png" : (text.includes("white") ? "classic_white_tee.png" : "product_tee.png"));
+      } else if (text.includes("pillow") || text.includes("mat") || text.includes("blanket") || text.includes("blacket") || text.includes("towel") || text.includes("wraper") || text.includes("box") || text.includes("combo") || text.includes("gift")) {
+        placeholder = "product_shortset.png";
+      }
       
       productData.images = [getImg(placeholder)];
     }

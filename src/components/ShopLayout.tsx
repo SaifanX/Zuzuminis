@@ -9,16 +9,33 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Filter, Search, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 
 export function ShopLayout() {
   const searchParams = useSearchParams();
   const search = searchParams.get("q") || undefined;
+  const posthog = usePostHog();
 
   // Initialize state from URL params if they exist
   const [ageGroup, setAgeGroup] = useState<string>(searchParams.get("ageGroup") || "All");
   const [gender, setGender] = useState<string>(searchParams.get("gender") || "All");
   const [category, setCategory] = useState<string>(searchParams.get("category") || "All");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  const handleCategoryChange = (cat: string) => {
+    setCategory(cat);
+    posthog?.capture("filter_applied", { filterType: "category", value: cat });
+  };
+
+  const handleAgeChange = (age: string) => {
+    setAgeGroup(age);
+    posthog?.capture("filter_applied", { filterType: "ageGroup", value: age });
+  };
+
+  const handleGenderChange = (gen: string) => {
+    setGender(gen);
+    posthog?.capture("filter_applied", { filterType: "gender", value: gen });
+  };
 
   // Sync state with URL if it changes (e.g. from navbar links)
   const prevParams = useRef(searchParams.toString());
@@ -64,13 +81,13 @@ export function ShopLayout() {
       <div className="space-y-4">
         <h3 className="font-display text-lg">Category</h3>
         <div className="flex flex-col gap-3 text-sm font-medium text-gray-600">
-          {["All", "Tees & Polos", "Dresses", "Sets", "Short Sets", "Jean Sets", "Sleepwear", "Formal Sets", "Cute Onesies"].map(cat => (
+          {["All", "Sets & Baba Suits", "Dresses & Frocks", "Nightwear & Sleepsuits", "Booties & Footwear", "Blankets & Towels", "Pillows & Bedding", "Gift Boxes & Combos", "Accessories & Essentials"].map(cat => (
             <label key={cat} className="flex items-center gap-3 cursor-pointer group">
               <input
                 type="radio"
                 name="category"
                 checked={category === cat}
-                onChange={() => setCategory(cat)}
+                onChange={() => handleCategoryChange(cat)}
                 className="w-4 h-4 text-zuzu-orange focus:ring-zuzu-orange border-gray-300"
               />
               <span className="group-hover:text-zuzu-orange transition-colors">{cat}</span>
@@ -81,12 +98,12 @@ export function ShopLayout() {
 
       {/* Age */}
       <div className="space-y-4">
-        <h3 className="font-display text-lg">Age</h3>
+        <h3 className="font-display text-lg">Age Group</h3>
         <div className="flex flex-wrap gap-2">
-          {["All", "0-1", "1-2", "2-3", "3-4", "4-5", "5-7"].map(age => (
+          {["All", "Newborn", "Toddler", "Big Kid"].map(age => (
             <button
               key={age}
-              onClick={() => setAgeGroup(age)}
+              onClick={() => handleAgeChange(age)}
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${ageGroup === age
                   ? "bg-zuzu-blue text-white shadow-md"
                   : "bg-butter text-gray-600 hover:bg-white/50 border border-black/5"
@@ -105,7 +122,7 @@ export function ShopLayout() {
           {["All", "Girl", "Boy", "Unisex"].map(gen => (
             <button
               key={gen}
-              onClick={() => setGender(gen)}
+              onClick={() => handleGenderChange(gen)}
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${gender === gen
                   ? "bg-zuzu-pink text-white shadow-md"
                   : "bg-butter text-gray-600 hover:bg-white/50 border border-black/5"

@@ -41,7 +41,7 @@ export function Footer() {
             <li><Link href="#" className="hover:text-zuzu-blue transition-colors">Track Order</Link></li>
             <li><Link href="#" className="hover:text-zuzu-blue transition-colors">Exchanges</Link></li>
             <li><Link href="/size-guide" className="hover:text-zuzu-blue transition-colors">Size Chart</Link></li>
-            <li><Link href="#" className="hover:text-zuzu-blue transition-colors">Shipping</Link></li>
+            <li><Link href="/deliveries" className="hover:text-zuzu-blue transition-colors">Shipping</Link></li>
           </ul>
         </div>
 
@@ -67,6 +67,9 @@ export function Footer() {
       <div className="max-w-7xl mx-auto pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-gray-300 font-bold uppercase tracking-widest">
         <p>© 2026 Zuzu Minis Studio. All Rights Reserved.</p>
         <div className="flex gap-6">
+          <Link href="/privacy" className="hover:text-zuzu-blue transition-colors">Privacy Policy</Link>
+          <Link href="/terms" className="hover:text-zuzu-blue transition-colors">Terms of Service</Link>
+          <Link href="/refunds" className="hover:text-zuzu-blue transition-colors">Return Policy</Link>
         </div>
       </div>
     </footer>

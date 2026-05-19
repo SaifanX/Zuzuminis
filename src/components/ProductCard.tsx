@@ -4,6 +4,7 @@ import { Heart, Star } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
+import { usePostHog } from "posthog-js/react";
 
 interface ProductCardProps {
   product: {
@@ -18,6 +19,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
+  const posthog = usePostHog();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -30,10 +32,23 @@ export function ProductCard({ product }: ProductCardProps) {
       slug: product.slug,
       quantity: 1
     });
+    posthog?.capture("quick_add_to_cart", {
+      productName: product.name,
+      price: product.price,
+      category: product.category,
+    });
+  };
+
+  const handleCardClick = () => {
+    posthog?.capture("product_viewed", {
+      productName: product.name,
+      price: product.price,
+      category: product.category,
+    });
   };
 
   return (
-    <Link href={`/product/${product.slug}`} className="product-card group cursor-pointer flex flex-col h-full block">
+    <Link onClick={handleCardClick} href={`/product/${product.slug}`} className="product-card group cursor-pointer flex flex-col h-full block">
       <div className="aspect-[4/5] bg-butter rounded-2xl overflow-hidden mb-6 relative border border-black/5 shadow-sm">
         <Image 
           src={product.images[0]} 

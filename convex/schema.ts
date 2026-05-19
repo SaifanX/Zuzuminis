@@ -36,20 +36,30 @@ export default defineSchema({
       price: v.number(),
     })),
     total: v.number(),
-    status: v.string(), // "pending", "paid", "shipped", "delivered"
+    status: v.string(), // "pending", "pending_payment", "paid", "shipped", "delivered"
+    paymentMethod: v.string(), // "COD" or "ONLINE"
+    razorpayOrderId: v.optional(v.string()),
+    razorpayPaymentId: v.optional(v.string()),
+    whatsappSent: v.optional(v.boolean()),
+    shipmentId: v.optional(v.string()),
+    awbCode: v.optional(v.string()),
+    courierName: v.optional(v.string()),
+    trackingUrl: v.optional(v.string()),
     customerInfo: v.object({
       name: v.string(),
       email: v.string(),
       address: v.string(),
       phone: v.string(),
     }),
-  }).index("by_user", ["userId"]),
+  }).index("by_user", ["userId"])
+    .index("by_razorpay_order_id", ["razorpayOrderId"]),
 
   users: defineTable({
     clerkId: v.string(),
     email: v.string(),
     name: v.optional(v.string()),
     points: v.optional(v.number()),
+    vipTier: v.optional(v.string()), // "MEMBER", "VIP_SILVER", "VIP_GOLD"
   }).index("by_clerk_id", ["clerkId"]),
 
   children: defineTable({
@@ -63,4 +73,41 @@ export default defineSchema({
     phone: v.string(),
     createdAt: v.number(),
   }).index("by_phone", ["phone"]),
+
+  waitlist: defineTable({
+    productId: v.id("products"),
+    email: v.string(),
+    phone: v.optional(v.string()),
+    resolved: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_product", ["productId"])
+    .index("by_resolved", ["resolved"]),
+
+  activeCarts: defineTable({
+    userId: v.string(),
+    email: v.string(),
+    cartValue: v.number(),
+    itemsCount: v.number(),
+    updatedAt: v.number(),
+    abandonedPingSent: v.boolean(),
+  }).index("by_user", ["userId"])
+    .index("by_abandoned", ["abandonedPingSent", "updatedAt"]),
+
+  marketingLogs: defineTable({
+    type: v.string(), // "ABANDONED_CART", "BACK_IN_STOCK", "VIP_UPGRADE", "SALE_BLAST"
+    recipient: v.string(), // email or phone
+    title: v.string(),
+    message: v.string(),
+    createdAt: v.number(),
+  }).index("by_type", ["type"]),
+
+  adminSecrets: defineTable({
+    key: v.string(),
+    value: v.string(),
+  }).index("by_key", ["key"]),
+
+  adminSessions: defineTable({
+    token: v.string(),
+    expiresAt: v.number(),
+  }).index("by_token", ["token"]),
 });
